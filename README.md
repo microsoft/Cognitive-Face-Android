@@ -1,12 +1,14 @@
-The client library
-==================
+# Microsoft Face API: Android Client Library
+This repo contains the Android client library & sample for the Microsoft Face API, part of [Cognitive Services](https://www.microsoft.com/cognitive-services).
+* [Learn about the API](https://www.microsoft.com/cognitive-services/en-us/face-api)
+* [View the documentation](https://www.microsoft.com/cognitive-services/en-us/face-api/documentation/overview)
+* [More Face API SDKs & Samples]()
 
-The Face API client library is a thin Java client wrapper for Microsoft Cognitive Services (formerly Project Oxford)
-Face REST APIs.  
 
-The easiest way to consume the client library is to add com.microsoft.projectoxford.face package from Maven Central Repository.
+## The Client Library
+The Face API client library is a thin Java client wrapper for Microsoft Face API.
 
-To find the latest version of client library, go to http://search.maven.org, and search for "com.microsoft.projectoxford".
+The easiest way to consume the client library is to add com.microsoft.projectoxford.face package from Maven Central Repository. To find the latest version of client library, go to http://search.maven.org, and search for "com.microsoft.projectoxford".
 
 To add the client library dependency from build.gradle file, add the following line in dependencies.
 
@@ -23,48 +25,34 @@ dependencies {
 ```
 
 To do add the client library dependency from Android Studio:
-1. From Menu, Choose File \> Project Structure
-2. Click on your app module
-3. Click on Dependencies tab
-4. Click "+" sign to add new dependency
-5. Pick "Library dependency" from the drop down list
-6. Type "com.microsoft.projectoxford" and hit the search icon from "Choose Library Dependency" dialog
-7. Pick the Project Oxford client library that you intend to use.
-8. Click "OK" to add the new dependency
+ 1. From Menu, Choose File \> Project Structure
+ 2. Click on your app module
+ 3. Click on Dependencies tab
+ 4. Click "+" sign to add new dependency
+ 5. Pick "Library dependency" from the drop down list
+ 6. Type "com.microsoft.projectoxford" and hit the search icon from "Choose Library Dependency" dialog
+ 7. Pick the Project Oxford client library that you intend to use.
+ 8. Click "OK" to add the new dependency
 
-The sample
-==========
+## The Sample
+This sample is an Android application to demonstrate the use of Microsoft Face API. It demonstrates face detection, face verification, face grouping, finding similar faces, and face identification functionalities.
 
-This sample is an Android application to demonstrate the use of Microsoft Cognitive Services (formerly Project Oxford)
-Face API.
-
-It demonstrates face detection, face verification, face grouping, finding
-similar faces, and face identification functionalities.
-
-Requirements
-------------
+### Requirements
 
 Android OS must be Android 4.1 or higher (API Level 16 or higher)
 
-Build the sample
-----------------
-
-1. First, you must obtain a Face API subscription key by following instructions in [Microsoft Cognitive Services subscription](<https://www.microsoft.com/cognitive-services/en-us/sign-up>).
-
-2.  Start Android Studio and open project from Face \> Android \> Sample folder.
-
-3.  In Android Studio -\> "Project" panel -\> "Android" view, open file
+### Build the Sample
+ 1. First, you must obtain a Face API subscription key by [following the instructions on our website](<https://www.microsoft.com/cognitive-services/en-us/sign-up>).
+ 2. Start Android Studio and open project from Face \> Android \> Sample folder.
+ 3. In Android Studio -\> "Project" panel -\> "Android" view, open file
     "app/res/values/strings.xml", and find the line
     "Please\_add\_the\_subscription\_key\_here;". Replace the
     "Please\_add\_the\_subscription\_key\_here" value with your subscription key
     string from the first step. If you cannot find the file "strings.xml", it is
     in folder "Sample\app\src\main\res\values\string.xml".
+ 4. In Android Studio, select menu "Build \> Make Project" to build the sample.
 
-4.  In Android Studio, select menu "Build \> Make Project" to build the sample.
-
-Run the sample
---------------
-
+### Run the sample
 In Android Studio, select menu "Run", and "Run app" to launch this sample app.
 
 Once the app is launched, click on buttons to use samples of between different
@@ -78,19 +66,16 @@ from everyone in it.
 <img src="SampleScreenshots/SampleRunning2.png" width="30%"/>
 <img src="SampleScreenshots/SampleRunning3.png" width="30%"/>
 
-Contributing
-============
-We welcome contributions and are always looking for new SDKs, input, and
-suggestions. Feel free to file issues on the repo and we'll address them as we can. You can also learn more about how you can help on the [Contribution
-Rules & Guidelines](</CONTRIBUTING.md>).
+## Contributing
+We welcome contributions. Feel free to file issues and pull requests on the repo and we'll address them as we can. Learn more about how you can help on our [Contribution Rules & Guidelines](</CONTRIBUTING.md>). 
 
-For questions, feedback, or suggestions about Microsoft Cognitive Services, feel free to reach out to us directly.
+You can reach out to us anytime with questions and suggestions using our communities below:
+ - **Support questions:** [StackOverflow](<https://stackoverflow.com/questions/tagged/microsoft-cognitive>)
+ - **Feedback & feature requests:** [Cognitive Services UserVoice Forum](<https://cognitive.uservoice.com>)
 
--   [Cognitive Services UserVoice Forum](<https://cognitive.uservoice.com>)
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-License
-=======
-
+## License
 All Microsoft Cognitive Services SDKs and samples are licensed with the MIT License. For more details, see
 [LICENSE](</LICENSE.md>).
 
