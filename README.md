@@ -1,4 +1,4 @@
-# Microsoft Face API: Android Client Library
+# Microsoft Face API: Android Client Library & Sample
 This repo contains the Android client library & sample for the Microsoft Face API, part of [Cognitive Services](https://www.microsoft.com/cognitive-services).
 * [Learn about the Face API](https://www.microsoft.com/cognitive-services/en-us/face-api)
 * [Read the documentation](https://www.microsoft.com/cognitive-services/en-us/face-api/documentation/overview)
