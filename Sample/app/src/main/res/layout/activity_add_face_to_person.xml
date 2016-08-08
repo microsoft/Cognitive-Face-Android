@@ -20,30 +20,6 @@
         android:textSize="@dimen/abc_text_size_large_material"
         android:text="@string/select_face_tip" />
 
-    <GridView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/gridView_faces_to_select"
-        android:layout_above="@+id/info"
-        android:layout_below="@+id/text_select_face_tip"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="@dimen/view_margin"
-        android:numColumns="3"
-        android:verticalSpacing="10dp"
-        android:horizontalSpacing="10dp"
-        android:gravity="center" />
-
-    <TextView
-        android:id="@+id/info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/done_and_save"
-        android:layout_gravity="center" />
-
     <Button
         android:id="@+id/done_and_save"
         android:layout_width="match_parent"
@@ -53,5 +29,29 @@
         android:text="@string/done_and_save"
         android:onClick="doneAndSave"
         style="@style/ButtonStyle" />
+
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/done_and_save"
+        android:layout_gravity="center" />
+
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/gridView_faces_to_select"
+        android:layout_above="@id/info"
+        android:layout_below="@id/text_select_face_tip"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="@dimen/view_margin"
+        android:numColumns="3"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:gravity="center" />
 
 </RelativeLayout>

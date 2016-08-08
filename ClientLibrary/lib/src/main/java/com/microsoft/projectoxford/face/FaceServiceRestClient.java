@@ -184,13 +184,32 @@ public class FaceServiceRestClient implements FaceServiceClient {
     }
 
     @Override
+    public VerifyResult verify(UUID faceId, String personGroupId, UUID personId) throws ClientException, IOException {
+        Map<String, Object> params = new HashMap<>();
+
+        String uri = String.format("%s/%s", mServiceHost, VERIFY_QUERY);
+        params.put("faceId", faceId);
+        params.put("personGroupId", personGroupId);
+        params.put("personId", personId);
+
+        String json = (String)mRestCall.request(uri, RequestMethod.POST, params, null);
+        return mGson.fromJson(json, VerifyResult.class);
+    }
+
+    @Override
     public IdentifyResult[] identity(String personGroupId, UUID[] faceIds, int maxNumOfCandidatesReturned) throws ClientException, IOException {
+        return identity(personGroupId, faceIds, 0.5f, maxNumOfCandidatesReturned);
+    }
+
+    @Override
+    public IdentifyResult[] identity(String personGroupId, UUID[] faceIds, float confidenceThreshold, int maxNumOfCandidatesReturned) throws ClientException, IOException {
         Map<String, Object> params = new HashMap<>();
 
         String uri = String.format("%s/%s", mServiceHost, IDENTIFY_QUERY);
         params.put("personGroupId", personGroupId);
         params.put("faceIds", faceIds);
         params.put("maxNumOfCandidatesReturned", maxNumOfCandidatesReturned);
+        params.put("confidenceThreshold", confidenceThreshold);
 
         String json = (String)mRestCall.request(uri, RequestMethod.POST, params, null);
         Type listType = new TypeToken<List<IdentifyResult>>() {
@@ -256,14 +275,29 @@ public class FaceServiceRestClient implements FaceServiceClient {
 
     @Override
     public PersonGroup[] getPersonGroups() throws ClientException, IOException {
+        return listPersonGroups("", 1000);
+    }
+
+    @Override
+    public PersonGroup[] listPersonGroups(String start, int top) throws ClientException, IOException {
         Map<String, Object> params = new HashMap<>();
-        String uri = String.format("%s/%s", mServiceHost, PERSON_GROUPS_QUERY);
+        String uri = String.format("%s/%s?start=%s&top=%s", mServiceHost, PERSON_GROUPS_QUERY, start, top);
         String json = (String)mRestCall.request(uri, RequestMethod.GET, params, null);
 
         Type listType = new TypeToken<List<PersonGroup>>() {
         }.getType();
         List<PersonGroup> result = mGson.fromJson(json, listType);
         return result.toArray(new PersonGroup[result.size()]);
+    }
+
+    @Override
+    public PersonGroup[] listPersonGroups(String start) throws ClientException, IOException {
+        return listPersonGroups(start, 1000);
+    }
+
+    @Override
+    public PersonGroup[] listPersonGroups() throws ClientException, IOException {
+        return listPersonGroups("", 1000);
     }
 
     @Override
@@ -404,11 +438,17 @@ public class FaceServiceRestClient implements FaceServiceClient {
 
     @Override
     public SimilarFace[] findSimilar(UUID faceId, UUID[] faceIds, int maxNumOfCandidatesReturned) throws ClientException, IOException {
+        return findSimilar(faceId, faceIds, maxNumOfCandidatesReturned, FindSimilarMatchMode.matchPerson);
+    }
+
+    @Override
+    public SimilarFace[] findSimilar(UUID faceId, UUID[] faceIds, int maxNumOfCandidatesReturned, FindSimilarMatchMode mode) throws ClientException, IOException {
         Map<String, Object> params = new HashMap<>();
         String uri = String.format("%s/%s", mServiceHost, FIND_SIMILARS_QUERY);
         params.put("faceId", faceId);
         params.put("faceIds", faceIds);
         params.put("maxNumOfCandidatesReturned", maxNumOfCandidatesReturned);
+        params.put("mode", mode.toString());
         String json = (String)mRestCall.request(uri, RequestMethod.POST, params, null);
         Type listType = new TypeToken<List<SimilarFace>>() {
         }.getType();
@@ -418,11 +458,17 @@ public class FaceServiceRestClient implements FaceServiceClient {
 
     @Override
     public SimilarPersistedFace[] findSimilar(UUID faceId, String faceListId, int maxNumOfCandidatesReturned) throws ClientException, IOException {
+        return findSimilar(faceId, faceListId, maxNumOfCandidatesReturned, FindSimilarMatchMode.matchPerson);
+    }
+
+    @Override
+    public SimilarPersistedFace[] findSimilar(UUID faceId, String faceListId, int maxNumOfCandidatesReturned, FindSimilarMatchMode mode) throws ClientException, IOException {
         Map<String, Object> params = new HashMap<>();
         String uri = String.format("%s/%s", mServiceHost, FIND_SIMILARS_QUERY);
         params.put("faceId", faceId);
         params.put("faceListId", faceListId);
         params.put("maxNumOfCandidatesReturned", maxNumOfCandidatesReturned);
+        params.put("mode", mode.toString());
         String json = (String)mRestCall.request(uri, RequestMethod.POST, params, null);
         Type listType = new TypeToken<List<SimilarPersistedFace>>() {
         }.getType();

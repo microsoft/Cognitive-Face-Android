@@ -116,6 +116,28 @@ public interface FaceServiceClient {
     }
 
     /**
+     * Supported two working modes of Face - Find Similar
+     */
+    public enum FindSimilarMatchMode {
+        /**
+         * matchPerson mode of Face - Find Similar, return the similar faces of the same person with the query face.
+         */
+        matchPerson {
+            public String toString() {
+                return "matchPerson";
+            }
+        },
+        /**
+         * matchFace mode of Face - Find Similar, return the similar faces of the query face, ignoring if they belong to the same person.
+         */
+        matchFace {
+            public String toString() {
+                return "matchFace";
+            }
+        }
+    }
+
+    /**
      * Detects faces in an URL image.
      * @param url url.
      * @param returnFaceId If set to <c>true</c> [return face ID].
@@ -150,6 +172,17 @@ public interface FaceServiceClient {
     VerifyResult verify(UUID faceId1, UUID faceId2) throws ClientException, IOException;
 
     /**
+     * Verify whether one face belong to a person.
+     * @param  faceId The face Id
+     * @param personGroupId The person group Id
+     * @param personId The person Id
+     * @return The verification result.
+     * @throws ClientException
+     * @throws IOException
+     */
+    VerifyResult verify(UUID faceId, String personGroupId, UUID personId) throws ClientException, IOException;
+
+    /**
      * Identities the faces in a given person group.
      * @param personGroupId The person group id.
      * @param faceIds The face ids.
@@ -159,6 +192,18 @@ public interface FaceServiceClient {
      * @throws IOException
      */
     IdentifyResult[] identity(String personGroupId, UUID[] faceIds, int maxNumOfCandidatesReturned) throws ClientException, IOException;
+
+    /**
+     * Identities the faces in a given person group.
+     * @param personGroupId The person group id.
+     * @param faceIds The face ids.
+     * @param maxNumOfCandidatesReturned The maximum number of candidates returned for each face.
+     * @param confidenceThreshold The user-defined confidence threshold, default as algorithm-specified.
+     * @return The identification results.
+     * @throws ClientException
+     * @throws IOException
+     */
+    IdentifyResult[] identity(String personGroupId, UUID[] faceIds, float confidenceThreshold, int maxNumOfCandidatesReturned) throws ClientException, IOException;
 
     /**
      * Trains the person group.
@@ -219,8 +264,37 @@ public interface FaceServiceClient {
      * @return Person group entity array.
      * @throws ClientException
      * @throws IOException
+     * @deprecated use {@link #listPersonGroups(String)} l} instead.
      */
+    @Deprecated
     PersonGroup[] getPersonGroups() throws ClientException, IOException;
+
+    /**
+     *  List the fist "top" of person groups whose Id is lager than "start".
+     *  @param start The person groups Id bar, list person groups whose Id is lager than "start.
+     *  @param top The number of person groups to list.
+     * @return Person group entity array.
+     * @throws ClientException
+     * @throws IOException
+     */
+    PersonGroup[] listPersonGroups(String start, int top) throws ClientException, IOException;
+
+    /**
+     *  List the fist "top" of person groups whose Id is lager than "start".
+     *  @param start The person groups Id bar, list person groups whose Id is lager than "start.
+     * @return Person group entity array.
+     * @throws ClientException
+     * @throws IOException
+     */
+    PersonGroup[] listPersonGroups(String start) throws ClientException, IOException;
+
+    /**
+     *  List the fist "top" of person groups whose Id is lager than "start".
+     * @return Person group entity array.
+     * @throws ClientException
+     * @throws IOException
+     */
+    PersonGroup[] listPersonGroups() throws ClientException, IOException;
 
     /**
      * Creates a person.
@@ -344,6 +418,18 @@ public interface FaceServiceClient {
     /**
      * Finds the similar faces.
      * @param faceId The face identifier.
+     * @param faceIds The face list identifier.
+     * @param maxNumOfCandidatesReturned The max number of candidates returned.
+     * @param mode Algorithm mode option, default to be "matchPerson"
+     * @return The similar persisted faces.
+     * @throws ClientException
+     * @throws IOException
+     */
+    SimilarFace[] findSimilar(UUID faceId, UUID[] faceIds, int maxNumOfCandidatesReturned, FindSimilarMatchMode mode) throws ClientException, IOException;
+
+    /**
+     * Finds the similar faces.
+     * @param faceId The face identifier.
      * @param faceListId The face list identifier.
      * @param maxNumOfCandidatesReturned The max number of candidates returned.
      * @return The similar persisted faces.
@@ -351,6 +437,18 @@ public interface FaceServiceClient {
      * @throws IOException
      */
     SimilarPersistedFace[] findSimilar(UUID faceId, String faceListId, int maxNumOfCandidatesReturned) throws ClientException, IOException;
+
+    /**
+     * Finds the similar faces.
+     * @param faceId The face identifier.
+     * @param faceListId The face list identifier.
+     * @param maxNumOfCandidatesReturned The max number of candidates returned.
+     * @param mode Algorithm mode option, default to be "matchPerson"
+     * @return The similar persisted faces.
+     * @throws ClientException
+     * @throws IOException
+     */
+    SimilarPersistedFace[] findSimilar(UUID faceId, String faceListId, int maxNumOfCandidatesReturned, FindSimilarMatchMode mode) throws ClientException, IOException;
 
     /**
      * Groups the face.

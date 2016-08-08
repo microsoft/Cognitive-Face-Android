@@ -37,7 +37,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -66,7 +66,7 @@ import java.util.Set;
 import java.util.UUID;
 
 
-public class PersonGroupListActivity extends ActionBarActivity {
+public class PersonGroupListActivity extends AppCompatActivity {
     // Background task of deleting a person group.
     class DeletePersonGroupTask extends AsyncTask<String, String, String> {
 

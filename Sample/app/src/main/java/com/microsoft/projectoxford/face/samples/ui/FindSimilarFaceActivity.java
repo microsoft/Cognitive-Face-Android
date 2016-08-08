@@ -30,7 +30,7 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-package com.microsoft.projectoxford.face.samples;
+package com.microsoft.projectoxford.face.samples.ui;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -38,7 +38,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,13 +51,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+
 import com.microsoft.projectoxford.face.FaceServiceClient;
 import com.microsoft.projectoxford.face.contract.Face;
 import com.microsoft.projectoxford.face.contract.SimilarFace;
+import com.microsoft.projectoxford.face.samples.R;
 import com.microsoft.projectoxford.face.samples.helper.ImageHelper;
 import com.microsoft.projectoxford.face.samples.helper.LogHelper;
 import com.microsoft.projectoxford.face.samples.helper.SampleApp;
-import com.microsoft.projectoxford.face.samples.helper.SelectImageActivity;
 import com.microsoft.projectoxford.face.samples.log.FindSimilarFaceLogActivity;
 
 import java.io.ByteArrayInputStream;
@@ -71,15 +73,15 @@ import java.util.Map;
 import java.util.UUID;
 
 
-public class FindSimilarFaceActivity extends ActionBarActivity {
-    // Background task for finding similar faces.
-    private class FindSimilarFaceTask extends AsyncTask<UUID, String, SimilarFace[]> {
+public class FindSimilarFaceActivity extends AppCompatActivity {
+    // Background task for finding personal similar faces.
+    private class FindPersonalSimilarFaceTask extends AsyncTask<UUID, String, SimilarFace[]> {
         private boolean mSucceed = true;
         @Override
         protected SimilarFace[] doInBackground(UUID... params) {
             // Get an instance of face service client to detect faces in image.
             FaceServiceClient faceServiceClient = SampleApp.getFaceServiceClient();
-            addLog("Request: Find faces similar to " + params[0].toString() +
+            addLog("Request: Find matchPerson similar faces to " + params[0].toString() +
                     " in " + (params.length - 1) + " face(s)");
             try{
                 publishProgress("Finding Similar Faces...");
@@ -87,9 +89,10 @@ public class FindSimilarFaceActivity extends ActionBarActivity {
                 UUID[] faceIds = Arrays.copyOfRange(params, 1, params.length);
                 // Start find similar faces.
                 return faceServiceClient.findSimilar(
-                        params[0],
-                        faceIds,      /* The first face ID to verify */
-                        faceIds.length);     /* The second face ID to verify */
+                        params[0],  /* The target face ID */
+                        faceIds,    /*candidate faces */
+                        4 /*max number of candidate returned*/
+                        );
             }  catch (Exception e) {
                 mSucceed = false;
                 publishProgress(e.getMessage());
@@ -114,15 +117,69 @@ public class FindSimilarFaceActivity extends ActionBarActivity {
             if (mSucceed) {
                 String resultString = "Found "
                         + (result == null ? "0": result.length)
-                        + " similar face" + ((result != null && result.length != 1)? "s": "");
+                        + " matchPerson similar face" + ((result != null && result.length != 1)? "s": "");
                 addLog("Response: Success. " + resultString);
                 setInfo(resultString);
             }
 
             // Show the result on screen when verification is done.
-            setUiAfterFindSimilarFaces(result);
+            setUiAfterFindPersonalSimilarFaces(result);
         }
     }
+
+    // Background task for finding facial similar faces.
+    private class FindFacialSimilarFaceTask extends AsyncTask<UUID, String, SimilarFace[]> {
+        private boolean mSucceed = true;
+        @Override
+        protected SimilarFace[] doInBackground(UUID... params) {
+            // Get an instance of face service client to detect faces in image.
+            FaceServiceClient faceServiceClient = SampleApp.getFaceServiceClient();
+            addLog("Request: Find matchFace similar faces to " + params[0].toString() +
+                    " in " + (params.length - 1) + " face(s)");
+            try{
+
+                UUID[] faceIds = Arrays.copyOfRange(params, 1, params.length);
+                // Start find similar faces.
+                return faceServiceClient.findSimilar(
+                        params[0],  /*candidate faces */
+                        faceIds,      /* The first face ID to verify */
+                        4, /*max number of candidate returned*/
+                        FaceServiceClient.FindSimilarMatchMode.matchFace);      /*The mode option indicating which method to use, the other option is "matchFirst"*/
+            }  catch (Exception e) {
+                mSucceed = false;
+                publishProgress(e.getMessage());
+                addLog(e.getMessage());
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            mProgressDialog.show();
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            // Show the status of background find similar face task on screen.
+            setUiDuringBackgroundTask(values[0]);
+        }
+
+        @Override
+        protected void onPostExecute(SimilarFace[] result) {
+            if (mSucceed) {
+                String resultString = "Found "
+                        + (result == null ? "0": result.length)
+                        + " matchFace similar face" + ((result != null && result.length != 1)? "s": "");
+                addLog("Response: Success. " + resultString);
+                appendInfo((result == null ? "0": result.length)
+                        + " matchFace similar face" + ((result != null && result.length != 1)? "s": ""));
+            }
+
+            // Show the result on screen when verification is done.
+            setUiAfterFindFacialSimilarFaces(result);
+        }
+    }
+
 
     // Background task for face detection
     class DetectionTask extends AsyncTask<InputStream, String, Face[]> {
@@ -177,13 +234,23 @@ public class FindSimilarFaceActivity extends ActionBarActivity {
         }
     }
 
-    void setUiAfterFindSimilarFaces(SimilarFace[] result) {
+    void setUiAfterFindPersonalSimilarFaces(SimilarFace[] result) {
         mProgressDialog.dismiss();
 
         setAllButtonsEnabledStatus(true);
 
         // Show the result of face finding similar faces.
         GridView similarFaces = (GridView) findViewById(R.id.similar_faces);
+        mSimilarFaceListAdapter = new SimilarFaceListAdapter(result);
+        similarFaces.setAdapter(mSimilarFaceListAdapter);
+    }
+    void setUiAfterFindFacialSimilarFaces(SimilarFace[] result) {
+        mProgressDialog.dismiss();
+
+        setAllButtonsEnabledStatus(true);
+
+        // Show the result of face finding similar faces.
+        GridView similarFaces = (GridView) findViewById(R.id.facial_similar_faces);
         mSimilarFaceListAdapter = new SimilarFaceListAdapter(result);
         similarFaces.setAdapter(mSimilarFaceListAdapter);
     }
@@ -396,6 +463,10 @@ public class FindSimilarFaceActivity extends ActionBarActivity {
                     mSimilarFaceListAdapter = new SimilarFaceListAdapter(null);
                     similarFaces.setAdapter(mSimilarFaceListAdapter);
 
+                    similarFaces = (GridView) findViewById(R.id.facial_similar_faces);
+                    mSimilarFaceListAdapter = new SimilarFaceListAdapter(null);
+                    similarFaces.setAdapter(mSimilarFaceListAdapter);
+
                     setInfo("");
                 }
 
@@ -422,7 +493,8 @@ public class FindSimilarFaceActivity extends ActionBarActivity {
         }
 
         setAllButtonsEnabledStatus(false);
-        new FindSimilarFaceTask().execute(faceIds.toArray(new UUID[faceIds.size()]));
+        new FindPersonalSimilarFaceTask().execute(faceIds.toArray(new UUID[faceIds.size()]));
+        new FindFacialSimilarFaceTask().execute(faceIds.toArray(new UUID[faceIds.size()]));
     }
 
     public void viewLog(View view) {
@@ -441,6 +513,12 @@ public class FindSimilarFaceActivity extends ActionBarActivity {
         textView.setText(info);
     }
 
+    // Append the information panel on screen.
+    private void appendInfo(String info) {
+        TextView textView = (TextView) findViewById(R.id.info);
+        String str = (String)textView.getText();
+        textView.setText(str + ',' + info);
+    }
     // Add a log item.
     private void addLog(String log) {
         LogHelper.addFindSimilarFaceLog(log);

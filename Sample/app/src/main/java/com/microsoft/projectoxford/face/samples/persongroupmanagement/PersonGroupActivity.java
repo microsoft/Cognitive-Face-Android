@@ -40,7 +40,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -72,7 +72,7 @@ import java.util.Set;
 import java.util.UUID;
 
 
-public class PersonGroupActivity extends ActionBarActivity {
+public class PersonGroupActivity extends AppCompatActivity {
     // Background task of adding a person group.
     class AddPersonGroupTask extends AsyncTask<String, String, String> {
         // Indicate the next step is to add person in this group, or finish editing this group.

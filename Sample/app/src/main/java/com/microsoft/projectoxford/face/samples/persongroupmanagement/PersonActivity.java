@@ -39,7 +39,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -62,7 +62,7 @@ import com.microsoft.projectoxford.face.contract.CreatePersonResult;
 import com.microsoft.projectoxford.face.samples.R;
 import com.microsoft.projectoxford.face.samples.helper.LogHelper;
 import com.microsoft.projectoxford.face.samples.helper.SampleApp;
-import com.microsoft.projectoxford.face.samples.helper.SelectImageActivity;
+import com.microsoft.projectoxford.face.samples.ui.SelectImageActivity;
 import com.microsoft.projectoxford.face.samples.helper.StorageHelper;
 
 import java.util.ArrayList;
@@ -71,7 +71,7 @@ import java.util.Set;
 import java.util.UUID;
 
 
-public class PersonActivity extends ActionBarActivity {
+public class PersonActivity extends AppCompatActivity {
     // Background task of adding a person to person group.
     class AddPersonTask extends AsyncTask<String, String, String> {
         // Indicate the next step is to add face in this person, or finish editing this person.

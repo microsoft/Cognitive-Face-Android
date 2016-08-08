@@ -34,7 +34,7 @@ package com.microsoft.projectoxford.face.samples.log;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +47,7 @@ import com.microsoft.projectoxford.face.samples.helper.LogHelper;
 
 import java.util.List;
 
-public class VerificationLogActivity extends ActionBarActivity {
+public class VerificationLogActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

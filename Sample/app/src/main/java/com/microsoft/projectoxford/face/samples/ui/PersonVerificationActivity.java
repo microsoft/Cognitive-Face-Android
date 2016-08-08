@@ -30,15 +30,16 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-package com.microsoft.projectoxford.face.samples;
+package com.microsoft.projectoxford.face.samples.ui;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,11 +53,13 @@ import android.widget.TextView;
 import com.microsoft.projectoxford.face.FaceServiceClient;
 import com.microsoft.projectoxford.face.contract.Face;
 import com.microsoft.projectoxford.face.contract.VerifyResult;
+import com.microsoft.projectoxford.face.samples.R;
 import com.microsoft.projectoxford.face.samples.helper.ImageHelper;
 import com.microsoft.projectoxford.face.samples.helper.LogHelper;
 import com.microsoft.projectoxford.face.samples.helper.SampleApp;
-import com.microsoft.projectoxford.face.samples.helper.SelectImageActivity;
+import com.microsoft.projectoxford.face.samples.helper.StorageHelper;
 import com.microsoft.projectoxford.face.samples.log.VerificationLogActivity;
+import com.microsoft.projectoxford.face.samples.persongroupmanagement.PersonGroupListActivity;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -66,18 +69,21 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
-public class VerificationActivity extends ActionBarActivity {
+public class PersonVerificationActivity extends AppCompatActivity {
     // Background task for face verification.
     private class VerificationTask extends AsyncTask<Void, String, VerifyResult> {
         // The IDs of two face to verify.
-        private UUID mFaceId0;
-        private UUID mFaceId1;
+        private UUID mFaceId;
+        private UUID mPersonId;
+        private String mPersonGroupId;
 
-        VerificationTask (UUID faceId0, UUID faceId1) {
-            mFaceId0 = faceId0;
-            mFaceId1 = faceId1;
+        VerificationTask (UUID faceId, String personGroupId, UUID personId1) {
+            mFaceId = faceId;
+            mPersonGroupId = personGroupId;
+            mPersonId = personId1;
         }
 
         @Override
@@ -89,8 +95,9 @@ public class VerificationActivity extends ActionBarActivity {
 
                 // Start verification.
                 return faceServiceClient.verify(
-                        mFaceId0,      /* The first face ID to verify */
-                        mFaceId1);     /* The second face ID to verify */
+                        mFaceId,      /* The face ID to verify */
+                        mPersonGroupId, /* The person group ID of the person*/
+                        mPersonId);     /* The person ID to verify */
             }  catch (Exception e) {
                 publishProgress(e.getMessage());
                 addLog(e.getMessage());
@@ -101,7 +108,7 @@ public class VerificationActivity extends ActionBarActivity {
         @Override
         protected void onPreExecute() {
             progressDialog.show();
-            addLog("Request: Verifying face " + mFaceId0 + " and face " + mFaceId1);
+            addLog("Request: Verifying face " + PersonVerificationActivity.this.mFaceId + " and person " + mPersonId);
         }
 
         @Override
@@ -113,9 +120,9 @@ public class VerificationActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(VerifyResult result) {
             if (result != null) {
-                addLog("Response: Success. Face " + mFaceId0 + " and face "
-                        + mFaceId1 + (result.isIdentical ? " " : " don't ")
-                        + "belong to the same person");
+                addLog("Response: Success. Face " + PersonVerificationActivity.this.mFaceId + " "
+                        + mPersonId + (result.isIdentical ? " " : " don't ")
+                        + "belong to person "+ PersonVerificationActivity.this.mPersonId);
             }
 
             // Show the result on screen when verification is done.
@@ -126,12 +133,7 @@ public class VerificationActivity extends ActionBarActivity {
     // Background task of face detection.
     private class DetectionTask extends AsyncTask<InputStream, String, Face[]> {
         // Index indicates detecting in which of the two images.
-        private int mIndex;
         private boolean mSucceed = true;
-
-        DetectionTask(int index) {
-            mIndex = index;
-        }
 
         @Override
         protected Face[] doInBackground(InputStream... params) {
@@ -159,7 +161,7 @@ public class VerificationActivity extends ActionBarActivity {
         @Override
         protected void onPreExecute() {
             progressDialog.show();
-            addLog("Request: Detecting in image" + mIndex);
+            addLog("Request: Detecting in image");
         }
 
         @Override
@@ -171,44 +173,42 @@ public class VerificationActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(Face[] result) {
             // Show the result on screen when detection is done.
-            setUiAfterDetection(result, mIndex, mSucceed);
+            setUiAfterDetection(result, mSucceed);
         }
     }
 
     // Flag to indicate which task is to be performed.
-    private static final int REQUEST_SELECT_IMAGE_0 = 0;
-    private static final int REQUEST_SELECT_IMAGE_1 = 1;
+    private static final int REQUEST_SELECT_IMAGE = 0;
 
     // The IDs of the two faces to be verified.
-    private UUID mFaceId0;
-    private UUID mFaceId1;
+    private UUID mFaceId;
 
     // The two images from where we get the two faces to verify.
-    private Bitmap mBitmap0;
-    private Bitmap mBitmap1;
+    private Bitmap mBitmap;
 
     // The adapter of the ListView which contains the detected faces from the two images.
-    protected FaceListAdapter mFaceListAdapter0;
-    protected FaceListAdapter mFaceListAdapter1;
+    protected FaceListAdapter mFaceListAdapter;
 
     // Progress dialog popped up when communicating with server.
     ProgressDialog progressDialog;
+
+    String mPersonGroupId;
+    UUID mPersonId;
+
+    PersonListAdapter mPersonListAdapter;
 
     // When the activity is created, set all the member variables to initial state.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_verification);
-
+        setContentView(R.layout.activity_verification_person);
         // Initialize the two ListViews which contain the thumbnails of the detected faces.
-        initializeFaceList(0);
-        initializeFaceList(1);
+        initializeFaceList();
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle(getString(R.string.progress_dialog_title));
 
-        clearDetectedFaces(0);
-        clearDetectedFaces(1);
+        clearDetectedFaces();
 
         // Disable button "verify" as the two face IDs to verify are not ready.
         setVerifyButtonEnabledStatus(false);
@@ -216,16 +216,71 @@ public class VerificationActivity extends ActionBarActivity {
         LogHelper.clearVerificationLog();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        ListView listView = (ListView) findViewById(R.id.list_persons);
+        mPersonListAdapter = new PersonListAdapter();
+        listView.setAdapter(mPersonListAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                setPersonSelected(position);
+            }
+        });
+
+        if (mPersonListAdapter.personIdList.size() != 0) {
+            setPersonSelected(0);
+        } else {
+            setPersonSelected(-1);
+        }
+    }
+
+    // select a person for verification
+    void setPersonSelected(int position) {
+        TextView textView = (TextView) findViewById(R.id.text_person_selected);
+        if (position > 0) {
+            String personGroupIdSelected = mPersonListAdapter.personGroupIds.get(position);
+            mPersonListAdapter.personGroupIds.set(
+                    position, mPersonListAdapter.personGroupIds.get(0));
+            mPersonListAdapter.personGroupIds.set(0, personGroupIdSelected);
+
+            String personIdSelected = mPersonListAdapter.personIdList.get(position);
+            mPersonListAdapter.personIdList.set(
+                    position, mPersonListAdapter.personIdList.get(0));
+            mPersonListAdapter.personIdList.set(0, personIdSelected);
+
+            ListView listView = (ListView) findViewById(R.id.list_persons);
+            listView.setAdapter(mPersonListAdapter);
+            setPersonSelected(0);
+        } else if (position < 0) {
+            setVerifyButtonEnabledStatus(false);
+            textView.setTextColor(Color.RED);
+            textView.setText("no person selected for verification warning");
+        } else {
+            mPersonGroupId = mPersonListAdapter.personGroupIds.get(0);
+            mPersonId =  UUID.fromString(mPersonListAdapter.personIdList.get(0));
+            String personName = StorageHelper.getPersonName(mPersonId.toString(), mPersonGroupId,
+                    PersonVerificationActivity.this);
+            refreshVerifyButtonEnabledStatus();
+            textView.setTextColor(Color.BLACK);
+            textView.setText(String.format("Person to use: %s", personName));
+        }
+    }
+
+    private void refreshVerifyButtonEnabledStatus() {
+        if (mFaceId != null && mPersonId != null) {
+            setVerifyButtonEnabledStatus(true);
+        } else {
+            setVerifyButtonEnabledStatus(false);
+        }
+    }
     // Called when image selection is done. Begin detecting if the image is selected successfully.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Index indicates which of the two images is selected.
-        int index;
-        if (requestCode == REQUEST_SELECT_IMAGE_0) {
-            index = 0;
-        } else if (requestCode == REQUEST_SELECT_IMAGE_1) {
-            index = 1;
-        } else {
+        if (requestCode != REQUEST_SELECT_IMAGE) {
             return;
         }
 
@@ -236,52 +291,41 @@ public class VerificationActivity extends ActionBarActivity {
             if (bitmap != null) {
                 // Image is select but not detected, disable verification button.
                 setVerifyButtonEnabledStatus(false);
-                clearDetectedFaces(index);
+                clearDetectedFaces();
 
-                // Set the image to detect.
-                if (index == 0) {
-                    mBitmap0 = bitmap;
-                    mFaceId0 = null;
-                } else {
-                    mBitmap1 = bitmap;
-                    mFaceId1 = null;
-                }
+                // Set the image to detect
+                mBitmap = bitmap;
+                mFaceId = null;
 
                 // Add verification log.
-                addLog("Image" + index + ": " + data.getData() + " resized to " + bitmap.getWidth()
+                addLog("Image"  + ": " + data.getData() + " resized to " + bitmap.getWidth()
                         + "x" + bitmap.getHeight());
 
                 // Start detecting in image.
-                detect(bitmap, index);
+                detect(bitmap);
             }
         }
     }
 
     // Clear the detected faces indicated by index.
-    private void clearDetectedFaces(int index) {
-        ListView faceList = (ListView) findViewById(
-                index == 0 ? R.id.list_faces_0: R.id.list_faces_1);
+    private void clearDetectedFaces() {
+        ListView faceList = (ListView) findViewById(R.id.list_faces_0);
         faceList.setVisibility(View.GONE);
 
-        ImageView imageView =
-                (ImageView) findViewById(index == 0 ? R.id.image_0: R.id.image_1);
+        ImageView imageView = (ImageView) findViewById(R.id.image_0);
         imageView.setImageResource(android.R.color.transparent);
     }
 
-    // Called when the "Select Image0" button is clicked.
-    public void selectImage0(View view) {
-        selectImage(0);
-    }
-
-    // Called when the "Select Image1" button is clicked.
-    public void selectImage1(View view) {
-        selectImage(1);
+    // Called when the "Select Image" button is clicked in face face verification.
+    public void selectImage(View view) {
+        Intent intent = new Intent(this, SelectImageActivity.class);
+        startActivityForResult(intent, REQUEST_SELECT_IMAGE);
     }
 
     // Called when the "Verify" button is clicked.
     public void verify(View view) {
         setAllButtonEnabledStatus(false);
-        new VerificationTask(mFaceId0, mFaceId1).execute();
+        new VerificationTask(mFaceId, mPersonGroupId, mPersonId).execute();
     }
 
     // View the log of service calls.
@@ -290,22 +334,9 @@ public class VerificationActivity extends ActionBarActivity {
         startActivity(intent);
     }
 
-    // Select the image indicated by index.
-    private void selectImage(int index) {
-        Intent intent = new Intent(this, SelectImageActivity.class);
-        startActivityForResult(intent, index == 0 ? REQUEST_SELECT_IMAGE_0: REQUEST_SELECT_IMAGE_1);
-    }
-
     // Set the select image button is enabled or not.
-    private void setSelectImageButtonEnabledStatus(boolean isEnabled, int index) {
-        Button button;
-
-        if (index == 0) {
-            button = (Button) findViewById(R.id.select_image_0);
-        } else {
-            button = (Button) findViewById(R.id.select_image_1);
-        }
-
+    private void setSelectImageButtonEnabledStatus(boolean isEnabled) {
+        Button button = (Button) findViewById(R.id.select_image_0);
         button.setEnabled(isEnabled);
 
         Button viewLog = (Button) findViewById(R.id.view_log);
@@ -314,8 +345,8 @@ public class VerificationActivity extends ActionBarActivity {
 
     // Set the verify button is enabled or not.
     private void setVerifyButtonEnabledStatus(boolean isEnabled) {
-        Button button = (Button) findViewById(R.id.verify);
-        button.setEnabled(isEnabled);
+            Button button = (Button) findViewById(R.id.verify);
+            button.setEnabled(isEnabled);
     }
 
     // Set all the buttons are enabled or not.
@@ -323,7 +354,7 @@ public class VerificationActivity extends ActionBarActivity {
         Button selectImage0 = (Button) findViewById(R.id.select_image_0);
         selectImage0.setEnabled(isEnabled);
 
-        Button selectImage1 = (Button) findViewById(R.id.select_image_1);
+        Button selectImage1 = (Button) findViewById(R.id.manage_persons);
         selectImage1.setEnabled(isEnabled);
 
         Button verify = (Button) findViewById(R.id.verify);
@@ -334,35 +365,28 @@ public class VerificationActivity extends ActionBarActivity {
     }
 
     // Initialize the ListView which contains the thumbnails of the detected faces.
-    private void initializeFaceList(final int index) {
+    private void initializeFaceList() {
         ListView listView =
-                (ListView) findViewById(index == 0 ? R.id.list_faces_0: R.id.list_faces_1);
+                (ListView) findViewById(R.id.list_faces_0);
 
         // When a detected face in the GridView is clicked, the face is selected to verify.
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                FaceListAdapter faceListAdapter =
-                        index == 0 ? mFaceListAdapter0: mFaceListAdapter1;
+                FaceListAdapter faceListAdapter = mFaceListAdapter;
 
-                if (!faceListAdapter.faces.get(position).faceId.equals(
-                        index == 0 ? mFaceId0: mFaceId1)) {
-                    if (index == 0) {
-                        mFaceId0 = faceListAdapter.faces.get(position).faceId;
-                    } else {
-                        mFaceId1 = faceListAdapter.faces.get(position).faceId;
-                    }
+                if (!faceListAdapter.faces.get(position).faceId.equals(mFaceId)) {
+                    mFaceId = faceListAdapter.faces.get(position).faceId;
 
                     ImageView imageView =
-                            (ImageView) findViewById(index == 0 ? R.id.image_0: R.id.image_1);
+                            (ImageView) findViewById( R.id.image_0);
                     imageView.setImageBitmap(faceListAdapter.faceThumbnails.get(position));
 
                     setInfo("");
                 }
 
                 // Show the list of detected face thumbnails.
-                ListView listView = (ListView) findViewById(
-                        index == 0 ? R.id.list_faces_0: R.id.list_faces_1);
+                ListView listView = (ListView) findViewById(R.id.list_faces_0);
                 listView.setAdapter(faceListAdapter);
             }
         });
@@ -386,70 +410,62 @@ public class VerificationActivity extends ActionBarActivity {
     }
 
     // Show the result on screen when detection in image that indicated by index is done.
-    private void setUiAfterDetection(Face[] result, int index, boolean succeed) {
-        setSelectImageButtonEnabledStatus(true, index);
+    private void setUiAfterDetection(Face[] result,boolean succeed) {
+        setSelectImageButtonEnabledStatus(true);
 
         if (succeed) {
             addLog("Response: Success. Detected "
-                    + result.length + " face(s) in image" + index);
+                    + result.length + " face(s) in image");
 
             setInfo(result.length + " face" + (result.length != 1 ? "s": "")  + " detected");
 
             // Show the detailed list of detected faces.
-            FaceListAdapter faceListAdapter = new FaceListAdapter(result, index);
+            FaceListAdapter faceListAdapter = new FaceListAdapter(result);
 
             // Set the default face ID to the ID of first face, if one or more faces are detected.
             if (faceListAdapter.faces.size() != 0) {
-                if (index == 0) {
-                    mFaceId0 = faceListAdapter.faces.get(0).faceId;
-                } else {
-                    mFaceId1 = faceListAdapter.faces.get(0).faceId;
-                }
+
+                mFaceId = faceListAdapter.faces.get(0).faceId;
+
                 // Show the thumbnail of the default face.
-                ImageView imageView = (ImageView) findViewById(index == 0 ? R.id.image_0: R.id.image_1);
+                ImageView imageView = (ImageView) findViewById(R.id.image_0);
                 imageView.setImageBitmap(faceListAdapter.faceThumbnails.get(0));
+
+                refreshVerifyButtonEnabledStatus();
             }
 
             // Show the list of detected face thumbnails.
-            ListView listView = (ListView) findViewById(
-                    index == 0 ? R.id.list_faces_0: R.id.list_faces_1);
+            ListView listView = (ListView) findViewById( R.id.list_faces_0);
             listView.setAdapter(faceListAdapter);
             listView.setVisibility(View.VISIBLE);
 
             // Set the face list adapters and bitmaps.
-            if (index == 0) {
-                mFaceListAdapter0 = faceListAdapter;
-                mBitmap0 = null;
-            } else {
-                mFaceListAdapter1 = faceListAdapter;
-                mBitmap1 = null;
-            }
+            mFaceListAdapter = faceListAdapter;
+            mBitmap = null;
         }
 
         if (result != null && result.length == 0) {
             setInfo("No face detected!");
         }
 
-        if ((index == 0 && mBitmap1 == null) || (index == 1 && mBitmap0 == null)) {
-            progressDialog.dismiss();
-        }
+        progressDialog.dismiss();
 
-        if (mFaceId0 != null && mFaceId1 != null) {
+        if (mFaceId != null && mPersonGroupId != null) {
             setVerifyButtonEnabledStatus(true);
         }
     }
 
     // Start detecting in image specified by index.
-    private void detect(Bitmap bitmap, int index) {
+    private void detect(Bitmap bitmap) {
         // Put the image into an input stream for detection.
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(output.toByteArray());
 
         // Start a background task to detect faces in the image.
-        new DetectionTask(index).execute(inputStream);
+        new DetectionTask().execute(inputStream);
 
-        setSelectImageButtonEnabledStatus(false, index);
+        setSelectImageButtonEnabledStatus(false);
 
         // Set the status to show that detection starts.
         setInfo("Detecting...");
@@ -471,24 +487,20 @@ public class VerificationActivity extends ActionBarActivity {
         // The detected faces.
         List<Face> faces;
 
-        int mIndex;
-
         // The thumbnails of detected faces.
         List<Bitmap> faceThumbnails;
 
         // Initialize with detection result and index indicating on which image the result is got.
-        FaceListAdapter(Face[] detectionResult, int index) {
+        FaceListAdapter(Face[] detectionResult) {
             faces = new ArrayList<>();
             faceThumbnails = new ArrayList<>();
-            mIndex = index;
 
             if (detectionResult != null) {
                 faces = Arrays.asList(detectionResult);
                 for (Face face: faces) {
                     try {
                         // Crop face thumbnail without landmarks drawn.
-                        faceThumbnails.add(ImageHelper.generateFaceThumbnail(
-                                index == 0 ? mBitmap0: mBitmap1, face.faceRectangle));
+                        faceThumbnails.add(ImageHelper.generateFaceThumbnail(mBitmap, face.faceRectangle));
                     } catch (IOException e) {
                         // Show the exception when generating face thumbnail fails.
                         setInfo(e.getMessage());
@@ -522,14 +534,93 @@ public class VerificationActivity extends ActionBarActivity {
             convertView.setId(position);
 
             Bitmap thumbnailToShow = faceThumbnails.get(position);
-            if (mIndex == 0 && faces.get(position).faceId.equals(mFaceId0)) {
-                thumbnailToShow = ImageHelper.highlightSelectedFaceThumbnail(thumbnailToShow);
-            } else if (mIndex == 1 && faces.get(position).faceId.equals(mFaceId1)){
+            if (faces.get(position).faceId.equals(mFaceId)) {
                 thumbnailToShow = ImageHelper.highlightSelectedFaceThumbnail(thumbnailToShow);
             }
 
             // Show the face thumbnail.
             ((ImageView)convertView.findViewById(R.id.image_face)).setImageBitmap(thumbnailToShow);
+
+            return convertView;
+        }
+    }
+
+    //manage persons button click.
+    public void managePersons(View view) {
+        Intent intent = new Intent(this, PersonGroupListActivity.class);
+        startActivity(intent);
+
+        if (mFaceId != null && mPersonId != null) {
+            setVerifyButtonEnabledStatus(true);
+        }
+        else
+        {
+            setVerifyButtonEnabledStatus(false);
+        }
+    }
+
+    // The adapter of the ListView which contains the person groups.
+    private class PersonListAdapter extends BaseAdapter {
+        List<String> personIdList;
+        List<String> personGroupIds;
+
+        // Initialize with all the persons of all person groups..
+        PersonListAdapter() {
+            personIdList = new ArrayList<>();
+            personGroupIds = new ArrayList<>();
+
+            Set<String> personGroups = StorageHelper.getAllPersonGroupIds(PersonVerificationActivity.this);
+
+            int index = 0;
+            for (String personGroupId: personGroups) {
+                personIdList.addAll(StorageHelper.getAllPersonIds(personGroupId, PersonVerificationActivity.this));
+                for(int i = index; i<personIdList.size(); ++i)
+                {
+                    personGroupIds.add(personGroupId);
+                }
+                index = personIdList.size();
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return personIdList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return new String[]{personIdList.get(position), personGroupIds.get(position)};
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                LayoutInflater layoutInflater =
+                        (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = layoutInflater.inflate(R.layout.item_person_group, parent, false);
+            }
+            convertView.setId(position);
+
+            // set the text of the item
+            String personName = StorageHelper.getPersonName(
+                    personIdList.get(position), personGroupIds.get(position), PersonVerificationActivity.this);
+            String personGroupName = StorageHelper.getPersonGroupName( personGroupIds.get(position), PersonVerificationActivity.this);
+            ((TextView)convertView.findViewById(R.id.text_person_group)).setText(
+                    String.format(
+                            "%s - %s",
+                            personGroupName,
+                            personName
+                            ));
+
+            if (position == 0) {
+                ((TextView)convertView.findViewById(R.id.text_person_group)).setTextColor(
+                        Color.parseColor("#3399FF"));
+            }
 
             return convertView;
         }

@@ -18,7 +18,7 @@
         android:id="@+id/faces"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/face_group_name"
+        android:layout_below="@id/face_group_name"
         android:numColumns="5"
         android:horizontalSpacing="@dimen/view_margin"
         android:verticalSpacing="@dimen/view_margin"

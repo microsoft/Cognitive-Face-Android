@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/text_person"
-        android:layout_below="@+id/image_person"
+        android:layout_below="@id/image_person"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
@@ -26,9 +26,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/checkbox_person"
-        android:layout_alignTop="@+id/image_person"
-        android:layout_alignRight="@+id/image_person"
-        android:layout_alignEnd="@+id/image_person"
+        android:layout_alignTop="@id/image_person"
+        android:layout_alignRight="@id/image_person"
+        android:layout_alignEnd="@id/image_person"
         android:checked="false" />
 
 </RelativeLayout>

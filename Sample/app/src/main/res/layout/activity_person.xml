@@ -30,25 +30,13 @@
             android:id="@+id/edit_person_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/person_name"
-            android:layout_toEndOf="@+id/person_name"
+            android:layout_toRightOf="@id/person_name"
+            android:layout_toEndOf="@id/person_name"
             android:singleLine="true"
             android:maxLength="30"
             android:hint="@string/type_in_person_name_tip" />
 
     </RelativeLayout>
-
-    <GridView
-        android:id="@+id/gridView_faces"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/person_name_view"
-        android:layout_above="@+id/person_tip"
-        android:numColumns="3"
-        android:verticalSpacing="@dimen/view_margin"
-        android:horizontalSpacing="@dimen/view_margin"
-        android:layout_marginBottom="@dimen/view_margin"
-        android:gravity="center" />
 
     <TextView
         android:id="@+id/person_tip"
@@ -56,20 +44,32 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/info"
+        android:layout_above="@id/info"
         android:layout_marginBottom="@dimen/view_margin"
         android:text="@string/person_tip" />
 
+    <GridView
+        android:id="@+id/gridView_faces"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/person_name_view"
+        android:layout_above="@id/person_tip"
+        android:numColumns="3"
+        android:verticalSpacing="@dimen/view_margin"
+        android:horizontalSpacing="@dimen/view_margin"
+        android:layout_marginBottom="@dimen/view_margin"
+        android:gravity="center" />
+
     <TextView
-        android:id="@+id/info"
+        android:id="@id/info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/button_bar"
+        android:layout_above="@id/button_bar"
         android:layout_gravity="center" />
 
     <LinearLayout
-        android:id="@+id/button_bar"
+        android:id="@id/button_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -87,7 +87,7 @@
             style="@style/ButtonStyle" />
 
         <Button
-            android:id="@+id/done_and_save"
+            android:id="@id/done_and_save"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

@@ -6,13 +6,13 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.microsoft.projectoxford.face.samples.FindSimilarFaceActivity">
+    tools:context="com.microsoft.projectoxford.face.samples.ui.FindSimilarFaceActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/info"
+        android:layout_above="@id/info"
         android:layout_marginBottom="@dimen/view_margin"
         android:baselineAligned="false"
         android:orientation="vertical" >
@@ -43,7 +43,7 @@
                     android:id="@+id/add_faces"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/text_all_faces"
+                    android:layout_below="@id/text_all_faces"
                     android:layout_marginTop="@dimen/view_margin"
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
@@ -58,8 +58,8 @@
                 android:id="@+id/all_faces"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/add_faces_control"
-                android:layout_toEndOf="@+id/add_faces_control"
+                android:layout_toRightOf="@id/add_faces_control"
+                android:layout_toEndOf="@id/add_faces_control"
                 android:numColumns="4"
                 android:horizontalSpacing="@dimen/view_margin"
                 android:verticalSpacing="@dimen/view_margin"
@@ -74,7 +74,7 @@
             android:layout_marginBottom="@dimen/view_margin">
 
             <RelativeLayout
-                android:id="@+id/image_control"
+                android:id="@id/image_control"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="@dimen/view_margin"
@@ -89,7 +89,7 @@
                     android:text="@string/target_face" />
 
                 <Button
-                    android:id="@+id/select_image"
+                    android:id="@id/select_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -101,19 +101,6 @@
 
             </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/image_control"
-                android:layout_toEndOf="@+id/image_control"
-                android:layout_toLeftOf="@+id/list_faces"
-                android:layout_toStartOf="@+id/list_faces"
-                android:layout_marginRight="@dimen/view_margin"
-                android:layout_marginEnd="@dimen/view_margin"
-                android:background="#E0E0E0"
-                android:contentDescription="@string/face" />
-
             <ListView
                 android:id="@+id/list_faces"
                 android:layout_width="64dp"
@@ -123,12 +110,25 @@
                 android:background="#E0E0E0"
                 android:verticalSpacing="@dimen/view_margin" />
 
+            <ImageView
+                android:id="@id/image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/image_control"
+                android:layout_toEndOf="@id/image_control"
+                android:layout_toLeftOf="@id/list_faces"
+                android:layout_toStartOf="@id/list_faces"
+                android:layout_marginRight="@dimen/view_margin"
+                android:layout_marginEnd="@dimen/view_margin"
+                android:background="#E0E0E0"
+                android:contentDescription="@string/face" />
+
         </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/result" />
+            android:text="@string/similar_face_description" />
 
         <GridView
             android:id="@+id/similar_faces"
@@ -140,18 +140,33 @@
             android:verticalSpacing="@dimen/view_margin"
             android:background="#E0E0E0" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/similar_face_description" />
+
+        <GridView
+            android:id="@+id/facial_similar_faces"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:numColumns="4"
+            android:horizontalSpacing="@dimen/view_margin"
+            android:verticalSpacing="@dimen/view_margin"
+            android:background="#E0E0E0" />
+
     </LinearLayout>
 
     <TextView
-        android:id="@+id/info"
+        android:id="@id/info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/button_bar"
+        android:layout_above="@id/button_bar"
         android:layout_gravity="center" />
 
     <LinearLayout
-        android:id="@+id/button_bar"
+        android:id="@id/button_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -169,7 +184,7 @@
             style="@style/ButtonStyle" />
 
         <Button
-            android:id="@+id/view_log"
+            android:id="@id/view_log"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
