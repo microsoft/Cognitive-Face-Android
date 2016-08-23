@@ -195,19 +195,23 @@ public class AddFaceToPersonActivity extends AppCompatActivity {
             for (Integer index: faceIndices) {
                 String faceId = mFaceGridViewAdapter.faceIdList.get(index).toString();
                 faceIds += faceId + ", ";
+                FileOutputStream fileOutputStream = null;
                 try {
                     File file = new File(getApplicationContext().getFilesDir(), faceId);
-                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                    fileOutputStream = new FileOutputStream(file);
                     mFaceGridViewAdapter.faceThumbnails.get(index)
                             .compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
                     fileOutputStream.flush();
-                    fileOutputStream.close();
 
                     Uri uri = Uri.fromFile(file);
                     StorageHelper.setFaceUri(
                             faceId, uri.toString(), mPersonId, AddFaceToPersonActivity.this);
                 } catch (IOException e) {
                     setInfo(e.getMessage());
+                }
+                finally {
+                    if(fileOutputStream != null) {
+                    fileOutputStream.close();
                 }
             }
             addLog("Response: Success. Face(s) " + faceIds + "added to person " + mPersonId);
