@@ -192,7 +192,7 @@ public class AddFaceToPersonActivity extends AppCompatActivity {
         mProgressDialog.dismiss();
         if (succeed) {
             String faceIds = "";
-            for (Integer index: faceIndices) {
+            for (Integer index : faceIndices) {
                 String faceId = mFaceGridViewAdapter.faceIdList.get(index).toString();
                 faceIds += faceId + ", ";
                 FileOutputStream fileOutputStream = null;
@@ -208,10 +208,14 @@ public class AddFaceToPersonActivity extends AppCompatActivity {
                             faceId, uri.toString(), mPersonId, AddFaceToPersonActivity.this);
                 } catch (IOException e) {
                     setInfo(e.getMessage());
-                }
-                finally {
-                    if(fileOutputStream != null) {
-                    fileOutputStream.close();
+                } finally {
+                    if (fileOutputStream != null) {
+                        try {
+                            fileOutputStream.close();
+                        } catch (IOException e) {
+                            setInfo(e.getMessage());
+                        }
+                    }
                 }
             }
             addLog("Response: Success. Face(s) " + faceIds + "added to person " + mPersonId);
