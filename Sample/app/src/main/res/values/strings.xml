@@ -7,18 +7,20 @@
 
     <!-- Main activity -->
     <string name="detection">Detection</string>
+    <string name="face_verification">Face to Face Verification</string>
+    <string name="person_verification">Face to Person Verification</string>
     <string name="verification">Verification</string>
     <string name="identification">Identification</string>
     <string name="grouping">Grouping</string>
     <string name="find_similar_faces">Find Similar Faces</string>
-    <string name="detection_description">Detect faces, face landmarks, pose, gender, and age.</string>
-    <string name="verification_description">Check if two faces belong to the same person.</string>
+    <string name="detection_description">Detect faces, face landmarks, pose, smile, glasses, gender, and age.</string>
+    <string name="verification_description">Authentication between two faces or between a face and a person.</string>
     <string name="grouping_description">Group faces based on similarity.</string>
     <string name="find_similar_face_description">Search for similar-looking faces.</string>
     <string name="identification_description">Identify the person from a face.</string>
 
     <!-- Tips to get subscription key shown on main activity-->
-    <string name="app_name">Project Oxford Face API Samples</string>
+    <string name="app_name">Microsoft Cognitive Services Face</string>
     <string name="add_subscription_key_tip_title">Subscription Key is Needed</string>
     <string name="add_subscription_key_tip">Please put your subscription key to source file \"app/res/values/strings.xml\" to enable Face API calls.</string>
 
@@ -32,6 +34,8 @@
     <string name="verify">Verify</string>
     <string name="face_0">Face0:</string>
     <string name="face_1">Face1:</string>
+    <string name="manage_persons">Manage\nPersons</string>
+    <string name="verification_menu">Verification\nMenu</string>
 
     <!-- Verification activity -->
     <string name="face">Face:</string>
@@ -59,6 +63,7 @@
     <string name="add_person">Add Person</string>
 
     <string name="person">Person</string>
+    <string name="persons">Persons</string>
     <string name="person_tip">- Long press on a face to delete.</string>
     <string name="type_in_person_name_tip">Name (within 30 characters)</string>
     <string name="add_face">Add Face</string>
@@ -67,10 +72,11 @@
     <string name="select_face_tip">Select this person\'s faces (if exist) by click on the checkbox.</string>
 
     <!-- Find similar faces and grouping activity -->
-    <string name="zero_face">Face database: 0 faces in total</string>
+    <string name="zero_face">Face list: 0 faces in total</string>
     <string name="target_face">Target face:</string>
     <string name="all_faces">All Faces:</string>
     <string name="add_faces">Add\nFaces</string>
+    <string name="similar_face_description">Finding 4 matchFace faces...</string>
 
     <!-- Common in all activities -->
     <string name="progress_dialog_title">Please wait</string>

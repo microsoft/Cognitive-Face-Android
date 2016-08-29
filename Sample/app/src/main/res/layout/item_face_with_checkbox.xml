@@ -6,7 +6,7 @@
     android:id="@+id/item_face" >
 
     <ImageView
-        android:id="@+id/image_face"
+        android:id="@id/image_face"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitCenter"
@@ -16,9 +16,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/checkbox_face"
-        android:layout_alignTop="@+id/image_face"
-        android:layout_alignRight="@+id/image_face"
-        android:layout_alignEnd="@+id/image_face"
+        android:layout_alignTop="@id/image_face"
+        android:layout_alignRight="@id/image_face"
+        android:layout_alignEnd="@id/image_face"
         android:checked="false" />
 
 </RelativeLayout>

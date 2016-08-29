@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
@@ -23,68 +23,83 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DetectionActivity"
+            android:name=".ui.DetectionActivity"
             android:label="@string/detection"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".ui.MainActivity" />
         </activity>
         <activity
-            android:name=".VerificationActivity"
-            android:label="@string/verification"
+            android:name=".ui.FaceVerificationActivity"
+            android:label="@string/face_verification"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ui.VerificationMenuActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".ui.MainActivity" />
         </activity>
         <activity
-            android:name=".IdentificationActivity"
+            android:name=".ui.PersonVerificationActivity"
+            android:label="@string/person_verification"
+            android:launchMode="singleTop"
+            android:parentActivityName=".ui.VerificationMenuActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.IdentificationActivity"
             android:label="@string/identification"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".ui.MainActivity" />
         </activity>
         <activity
-            android:name=".GroupingActivity"
+            android:name=".ui.GroupingActivity"
             android:label="@string/grouping"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".ui.MainActivity" />
         </activity>
         <activity
-            android:name=".FindSimilarFaceActivity"
+            android:name=".ui.FindSimilarFaceActivity"
             android:label="@string/find_similar_faces"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".ui.MainActivity" />
         </activity>
         <activity
-            android:name=".helper.SelectImageActivity"
+            android:name=".ui.SelectImageActivity"
             android:label="@string/select_an_image"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.VerificationMenuActivity"
+            android:label="@string/verification"
+            android:parentActivityName=".ui.MainActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".persongroupmanagement.PersonGroupListActivity"
             android:label="@string/person_group_list"
             android:launchMode="singleTop"
-            android:parentActivityName=".IdentificationActivity"
+            android:parentActivityName=".ui.IdentificationActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".IdentificationActivity" />
+                android:value=".ui.IdentificationActivity" />
         </activity>
         <activity
             android:name=".persongroupmanagement.PersonGroupActivity"
@@ -120,47 +135,47 @@
         <activity
             android:name=".log.DetectionLogActivity"
             android:label="@string/detection_log"
-            android:parentActivityName=".DetectionActivity"
+            android:parentActivityName=".ui.DetectionActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DetectionActivity" />
+                android:value=".ui.DetectionActivity" />
         </activity>
         <activity
             android:name=".log.VerificationLogActivity"
             android:label="@string/verification_log"
-            android:parentActivityName=".VerificationActivity"
+            android:parentActivityName=".ui.FaceVerificationActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".VerificationActivity" />
+                android:value=".ui.FaceVerificationActivity" />
         </activity>
         <activity
             android:name=".log.FindSimilarFaceLogActivity"
             android:label="@string/find_similar_face_log"
-            android:parentActivityName=".FindSimilarFaceActivity"
+            android:parentActivityName=".ui.FindSimilarFaceActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".FindSimilarFaceActivity" />
+                android:value=".ui.FindSimilarFaceActivity" />
         </activity>
         <activity
             android:name=".log.GroupingLogActivity"
             android:label="@string/grouping_log"
-            android:parentActivityName=".GroupingActivity"
+            android:parentActivityName=".ui.GroupingActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".GroupingActivity" />
+                android:value=".ui.GroupingActivity" />
         </activity>
         <activity
             android:name=".log.IdentificationLogActivity"
             android:label="@string/identification_log"
-            android:parentActivityName=".IdentificationActivity"
+            android:parentActivityName=".ui.IdentificationActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".IdentificationActivity" />
+                android:value=".ui.IdentificationActivity" />
         </activity>
     </application>
 

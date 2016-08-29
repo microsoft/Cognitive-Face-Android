@@ -66,6 +66,9 @@ from everyone in it.
 <img src="SampleScreenshots/SampleRunning2.png" width="30%"/>
 <img src="SampleScreenshots/SampleRunning3.png" width="30%"/>
 
+## Updates
+* 8/2016: Sample updated for [July 2016 Face API changes](https://www.microsoft.com/cognitive-services/en-us/face-api/documentation/overview#changes)
+
 ## Contributing
 We welcome contributions. Feel free to file issues and pull requests on the repo and we'll address them as we can. Learn more about how you can help on our [Contribution Rules & Guidelines](</CONTRIBUTING.md>). 
 

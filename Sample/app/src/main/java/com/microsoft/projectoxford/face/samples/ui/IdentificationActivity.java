@@ -30,7 +30,7 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-package com.microsoft.projectoxford.face.samples;
+package com.microsoft.projectoxford.face.samples.ui;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -40,7 +40,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,10 +55,10 @@ import com.microsoft.projectoxford.face.FaceServiceClient;
 import com.microsoft.projectoxford.face.contract.Face;
 import com.microsoft.projectoxford.face.contract.IdentifyResult;
 import com.microsoft.projectoxford.face.contract.TrainingStatus;
+import com.microsoft.projectoxford.face.samples.R;
 import com.microsoft.projectoxford.face.samples.helper.ImageHelper;
 import com.microsoft.projectoxford.face.samples.helper.LogHelper;
 import com.microsoft.projectoxford.face.samples.helper.SampleApp;
-import com.microsoft.projectoxford.face.samples.helper.SelectImageActivity;
 import com.microsoft.projectoxford.face.samples.helper.StorageHelper;
 import com.microsoft.projectoxford.face.samples.log.IdentificationLogActivity;
 import com.microsoft.projectoxford.face.samples.persongroupmanagement.PersonGroupListActivity;
@@ -75,7 +75,7 @@ import java.util.Set;
 import java.util.UUID;
 
 
-public class IdentificationActivity extends ActionBarActivity {
+public class IdentificationActivity extends AppCompatActivity {
 
     // Background task of face identification.
     private class IdentificationTask extends AsyncTask<UUID, String, IdentifyResult[]> {
@@ -114,7 +114,7 @@ public class IdentificationActivity extends ActionBarActivity {
                 return faceServiceClient.identity(
                         this.mPersonGroupId,   /* personGroupId */
                         params,                  /* faceIds */
-                        1);                      /* maxNumOfCandidatesReturned */
+                        1);  /* maxNumOfCandidatesReturned */
             }  catch (Exception e) {
                 mSucceed = false;
                 publishProgress(e.getMessage());

@@ -6,13 +6,13 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.microsoft.projectoxford.face.samples.IdentificationActivity">
+    tools:context="com.microsoft.projectoxford.face.samples.ui.IdentificationActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/info"
+        android:layout_above="@id/info"
         android:orientation="vertical" >
 
         <RelativeLayout
@@ -22,7 +22,7 @@
             android:layout_marginBottom="@dimen/view_margin">
 
             <RelativeLayout
-                android:id="@+id/image_control"
+                android:id="@id/image_control"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="@dimen/view_margin"
@@ -37,7 +37,7 @@
                     android:text="@string/target_image" />
 
                 <Button
-                    android:id="@+id/select_image"
+                    android:id="@id/select_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -50,11 +50,11 @@
             </RelativeLayout>
 
             <ImageView
-                android:id="@+id/image"
+                android:id="@id/image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/image_control"
-                android:layout_toEndOf="@+id/image_control"
+                android:layout_toRightOf="@id/image_control"
+                android:layout_toEndOf="@id/image_control"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:background="#E0E0E0"
@@ -88,7 +88,7 @@
                     android:id="@+id/manage_person_groups"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/text_person_group_selected"
+                    android:layout_below="@id/text_person_group_selected"
                     android:layout_marginTop="@dimen/view_margin"
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
@@ -103,8 +103,8 @@
                 android:id="@+id/person_group_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/person_group_control"
-                android:layout_toEndOf="@+id/person_group_control" >
+                android:layout_toRightOf="@id/person_group_control"
+                android:layout_toEndOf="@id/person_group_control" >
 
                 <ListView
                     android:id="@+id/list_person_groups_identify"
@@ -132,15 +132,15 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/info"
+        android:id="@id/info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/button_bar"
+        android:layout_above="@id/button_bar"
         android:layout_gravity="center" />
 
     <LinearLayout
-        android:id="@+id/button_bar"
+        android:id="@id/button_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -158,7 +158,7 @@
             style="@style/ButtonStyle" />
 
         <Button
-            android:id="@+id/view_log"
+            android:id="@id/view_log"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

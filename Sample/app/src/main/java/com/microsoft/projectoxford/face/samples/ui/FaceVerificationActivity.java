@@ -30,7 +30,7 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-package com.microsoft.projectoxford.face.samples;
+package com.microsoft.projectoxford.face.samples.ui;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -38,7 +38,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,10 +52,10 @@ import android.widget.TextView;
 import com.microsoft.projectoxford.face.FaceServiceClient;
 import com.microsoft.projectoxford.face.contract.Face;
 import com.microsoft.projectoxford.face.contract.VerifyResult;
+import com.microsoft.projectoxford.face.samples.R;
 import com.microsoft.projectoxford.face.samples.helper.ImageHelper;
 import com.microsoft.projectoxford.face.samples.helper.LogHelper;
 import com.microsoft.projectoxford.face.samples.helper.SampleApp;
-import com.microsoft.projectoxford.face.samples.helper.SelectImageActivity;
 import com.microsoft.projectoxford.face.samples.log.VerificationLogActivity;
 
 import java.io.ByteArrayInputStream;
@@ -68,7 +68,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class VerificationActivity extends ActionBarActivity {
+public class FaceVerificationActivity extends AppCompatActivity {
     // Background task for face verification.
     private class VerificationTask extends AsyncTask<Void, String, VerifyResult> {
         // The IDs of two face to verify.
@@ -179,6 +179,7 @@ public class VerificationActivity extends ActionBarActivity {
     private static final int REQUEST_SELECT_IMAGE_0 = 0;
     private static final int REQUEST_SELECT_IMAGE_1 = 1;
 
+
     // The IDs of the two faces to be verified.
     private UUID mFaceId0;
     private UUID mFaceId1;
@@ -268,12 +269,12 @@ public class VerificationActivity extends ActionBarActivity {
         imageView.setImageResource(android.R.color.transparent);
     }
 
-    // Called when the "Select Image0" button is clicked.
+    // Called when the "Select Image0" button is clicked in face face verification.
     public void selectImage0(View view) {
         selectImage(0);
     }
 
-    // Called when the "Select Image1" button is clicked.
+    // Called when the "Select Image1" button is clicked in face face verification.
     public void selectImage1(View view) {
         selectImage(1);
     }
@@ -293,7 +294,7 @@ public class VerificationActivity extends ActionBarActivity {
     // Select the image indicated by index.
     private void selectImage(int index) {
         Intent intent = new Intent(this, SelectImageActivity.class);
-        startActivityForResult(intent, index == 0 ? REQUEST_SELECT_IMAGE_0: REQUEST_SELECT_IMAGE_1);
+        startActivityForResult(intent, index == 0 ? REQUEST_SELECT_IMAGE_0: REQUEST_SELECT_IMAGE_1 );
     }
 
     // Set the select image button is enabled or not.
@@ -302,7 +303,7 @@ public class VerificationActivity extends ActionBarActivity {
 
         if (index == 0) {
             button = (Button) findViewById(R.id.select_image_0);
-        } else {
+        } else{
             button = (Button) findViewById(R.id.select_image_1);
         }
 
@@ -314,8 +315,8 @@ public class VerificationActivity extends ActionBarActivity {
 
     // Set the verify button is enabled or not.
     private void setVerifyButtonEnabledStatus(boolean isEnabled) {
-        Button button = (Button) findViewById(R.id.verify);
-        button.setEnabled(isEnabled);
+            Button button = (Button) findViewById(R.id.verify);
+            button.setEnabled(isEnabled);
     }
 
     // Set all the buttons are enabled or not.
@@ -402,7 +403,8 @@ public class VerificationActivity extends ActionBarActivity {
             if (faceListAdapter.faces.size() != 0) {
                 if (index == 0) {
                     mFaceId0 = faceListAdapter.faces.get(0).faceId;
-                } else {
+                }
+                else {
                     mFaceId1 = faceListAdapter.faces.get(0).faceId;
                 }
                 // Show the thumbnail of the default face.
@@ -430,7 +432,7 @@ public class VerificationActivity extends ActionBarActivity {
             setInfo("No face detected!");
         }
 
-        if ((index == 0 && mBitmap1 == null) || (index == 1 && mBitmap0 == null)) {
+        if ((index == 0 && mBitmap1 == null) || (index == 1 && mBitmap0 == null) || index == 2) {
             progressDialog.dismiss();
         }
 

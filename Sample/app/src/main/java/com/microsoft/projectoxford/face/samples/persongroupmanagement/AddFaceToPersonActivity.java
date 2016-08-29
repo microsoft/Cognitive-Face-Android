@@ -39,7 +39,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +49,7 @@ import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 
 import com.microsoft.projectoxford.face.FaceServiceClient;
 import com.microsoft.projectoxford.face.contract.AddPersistedFaceResult;
@@ -71,7 +72,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class AddFaceToPersonActivity extends ActionBarActivity {
+public class AddFaceToPersonActivity extends AppCompatActivity {
     // Background task of adding a face to person.
     class AddFaceTask extends AsyncTask<Void, String, Boolean> {
         List<Integer> mFaceIndices;
@@ -191,22 +192,30 @@ public class AddFaceToPersonActivity extends ActionBarActivity {
         mProgressDialog.dismiss();
         if (succeed) {
             String faceIds = "";
-            for (Integer index: faceIndices) {
+            for (Integer index : faceIndices) {
                 String faceId = mFaceGridViewAdapter.faceIdList.get(index).toString();
                 faceIds += faceId + ", ";
+                FileOutputStream fileOutputStream = null;
                 try {
                     File file = new File(getApplicationContext().getFilesDir(), faceId);
-                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                    fileOutputStream = new FileOutputStream(file);
                     mFaceGridViewAdapter.faceThumbnails.get(index)
                             .compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
                     fileOutputStream.flush();
-                    fileOutputStream.close();
 
                     Uri uri = Uri.fromFile(file);
                     StorageHelper.setFaceUri(
                             faceId, uri.toString(), mPersonId, AddFaceToPersonActivity.this);
                 } catch (IOException e) {
                     setInfo(e.getMessage());
+                } finally {
+                    if (fileOutputStream != null) {
+                        try {
+                            fileOutputStream.close();
+                        } catch (IOException e) {
+                            setInfo(e.getMessage());
+                        }
+                    }
                 }
             }
             addLog("Response: Success. Face(s) " + faceIds + "added to person " + mPersonId);

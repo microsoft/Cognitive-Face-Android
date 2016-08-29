@@ -5,7 +5,7 @@
 // Microsoft Cognitive Services (formerly Project Oxford): https://www.microsoft.com/cognitive-services
 //
 // Microsoft Cognitive Services (formerly Project Oxford) GitHub:
-// https://github.com/Microsoft/Cognitive-Face-Android
+// https://github.com/Microsoft/ProjectOxford-ClientSDK
 //
 // Copyright (c) Microsoft Corporation
 // All rights reserved.
@@ -30,51 +30,37 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-package com.microsoft.projectoxford.face.samples;
+package com.microsoft.projectoxford.face.samples.ui;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-public class MainActivity extends ActionBarActivity {
+import com.microsoft.projectoxford.face.samples.R;
+
+/**
+ * Created by wangjun on 5/24/2016.
+ */
+public class VerificationMenuActivity extends AppCompatActivity {
+
+    // When the activity is created, set all the member variables to initial state.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        if (getString(R.string.subscription_key).startsWith("Please")) {
-            new AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.add_subscription_key_tip_title))
-                    .setMessage(getString(R.string.add_subscription_key_tip))
-                    .setCancelable(false)
-                    .show();
-        }
+        setContentView(R.layout.activity_verification_menu);
     }
-
-    public void detection(View view) {
-        Intent intent = new Intent(this, DetectionActivity.class);
+    //face to face verification button click
+    public void faceFaceVerification(View view)
+    {
+        Intent intent = new Intent(this, FaceVerificationActivity.class);
         startActivity(intent);
     }
 
-    public void verification(View view) {
-        Intent intent = new Intent(this, VerificationActivity.class);
-        startActivity(intent);
-    }
-
-    public void grouping(View view) {
-        Intent intent = new Intent(this, GroupingActivity.class);
-        startActivity(intent);
-    }
-
-    public void findSimilarFace(View view) {
-        Intent intent = new Intent(this, FindSimilarFaceActivity.class);
-        startActivity(intent);
-    }
-
-    public void identification(View view) {
-        Intent intent = new Intent(this, IdentificationActivity.class);
+    //face to face verification button click
+    public void facePersonVerification(View view)
+    {
+        Intent intent = new Intent(this, PersonVerificationActivity.class);
         startActivity(intent);
     }
 }
