@@ -53,6 +53,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Locale;
 import java.util.Map;
 
 public class WebServiceRequest {
@@ -147,7 +148,7 @@ public class WebServiceRequest {
 
         if (contentType != null && !(contentType.length() == 0)) {
             request.setHeader(CONTENT_TYPE, contentType);
-            if (contentType.toLowerCase().contains(OCTET_STREAM)) {
+            if (contentType.toLowerCase(Locale.ENGLISH).contains(OCTET_STREAM)) {
                 isStream = true;
             }
         } else {
