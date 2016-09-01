@@ -60,6 +60,7 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -67,7 +68,8 @@ public class FaceServiceRestClient implements FaceServiceClient {
     private final WebServiceRequest mRestCall;
     private Gson mGson = new GsonBuilder().setDateFormat("M/d/yyyy h:m:s a").create();
 
-    private String mServiceHost = "https://api.projectoxford.ai/face/v1.0";
+    private static final String DEFAULT_API_ROOT = "https://api.projectoxford.ai/face/v1.0";
+    private final String mServiceHost;
 
     private static final String DETECT_QUERY = "detect";
     private static final String VERIFY_QUERY = "verify";
@@ -84,11 +86,11 @@ public class FaceServiceRestClient implements FaceServiceClient {
     private static final String DATA = "data";
 
     public FaceServiceRestClient(String subscriptionKey) {
-        mRestCall = new WebServiceRequest(subscriptionKey);
+        this(DEFAULT_API_ROOT, subscriptionKey);
     }
 
     public FaceServiceRestClient(String serviceHost, String subscriptionKey) {
-        mServiceHost = serviceHost;
+        mServiceHost = serviceHost.replaceAll("/$", "");
         mRestCall = new WebServiceRequest(subscriptionKey);
     }
 
@@ -345,7 +347,7 @@ public class FaceServiceRestClient implements FaceServiceClient {
         }
 
         if (targetFace != null) {
-            String targetFaceString = String.format("%1d,%2d,%3d,%4d", targetFace.left, targetFace.top, targetFace.width, targetFace.height);
+            String targetFaceString = String.format(Locale.ENGLISH, "%1d,%2d,%3d,%4d", targetFace.left, targetFace.top, targetFace.width, targetFace.height);
             params.put("targetFace", targetFaceString);
         }
 
@@ -368,7 +370,7 @@ public class FaceServiceRestClient implements FaceServiceClient {
         }
 
         if (targetFace != null) {
-            String targetFaceString = String.format("%1d,%2d,%3d,%4d", targetFace.left, targetFace.top, targetFace.width, targetFace.height);
+            String targetFaceString = String.format(Locale.ENGLISH, "%1d,%2d,%3d,%4d", targetFace.left, targetFace.top, targetFace.width, targetFace.height);
             params.put("targetFace", targetFaceString);
         }
 
@@ -545,7 +547,7 @@ public class FaceServiceRestClient implements FaceServiceClient {
         }
 
         if (targetFace != null) {
-            String targetFaceString = String.format("%1d,%2d,%3d,%4d", targetFace.left, targetFace.top, targetFace.width, targetFace.height);
+            String targetFaceString = String.format(Locale.ENGLISH, "%1d,%2d,%3d,%4d", targetFace.left, targetFace.top, targetFace.width, targetFace.height);
             params.put("targetFace", targetFaceString);
         }
 
@@ -565,7 +567,7 @@ public class FaceServiceRestClient implements FaceServiceClient {
         }
 
         if (targetFace != null) {
-            String targetFaceString = String.format("%1d,%2d,%3d,%4d", targetFace.left, targetFace.top, targetFace.width, targetFace.height);
+            String targetFaceString = String.format(Locale.ENGLISH, "%1d,%2d,%3d,%4d", targetFace.left, targetFace.top, targetFace.width, targetFace.height);
             params.put("targetFace", targetFaceString);
         }
 
