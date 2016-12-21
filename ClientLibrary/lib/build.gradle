@@ -50,22 +50,22 @@ uploadArchives {
                 // optionally artifactId can be defined here
 
                 // Descriptions of the artifacts.
-                description 'This client library allows the use of Microsoft\'s state-of-the-art cloud-based face algorithms to detect and recognize human faces in images. See https://github.com/Microsoft/ProjectOxford-ClientSDK/tree/master/Face for more information.'
+                description 'This client library allows the use of Microsoft\'s state-of-the-art cloud-based face algorithms to detect and recognize human faces in images. See https://github.com/Microsoft/Cognitive-Face-Android for more information.'
 
                 // Project URL
-                url 'https://github.com/Microsoft/ProjectOxford-ClientSDK'
+                url 'https://github.com/Microsoft/Cognitive-Face-Android'
 
                 // Github information
                 scm {
-                    connection 'scm:git:https://github.com/Microsoft/ProjectOxford-ClientSDK'
-                    developerConnection 'scm:git:https://github.com/Microsoft/ProjectOxford-ClientSDK'
-                    url 'scm:git:https://github.com/Microsoft/ProjectOxford-ClientSDK'
+                    connection 'scm:git:https://github.com/Microsoft/Cognitive-Face-Android'
+                    developerConnection 'scm:git:https://github.com/Microsoft/Cognitive-Face-Android'
+                    url 'scm:git:https://github.com/Microsoft/Cognitive-Face-Android'
                 }
 
                 licenses {
                     license {
                         name 'MIT'
-                        url 'https://github.com/Microsoft/ProjectOxford-ClientSDK/blob/master/LICENSE.md'
+                        url 'https://github.com/Microsoft/Cognitive-Face-Android/blob/master/LICENSE.md'
                     }
                 }
 
