@@ -44,4 +44,6 @@ public class FaceAttribute {
     public HeadPose headPose;
 
     public Glasses glasses;
+
+    public Emotion emotion;
 }

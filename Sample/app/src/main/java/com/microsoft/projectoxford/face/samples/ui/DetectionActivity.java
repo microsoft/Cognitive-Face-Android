@@ -51,7 +51,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.microsoft.projectoxford.face.FaceServiceClient;
+import com.microsoft.projectoxford.face.contract.Emotion;
 import com.microsoft.projectoxford.face.contract.Face;
+import com.microsoft.projectoxford.face.contract.FacialHair;
+import com.microsoft.projectoxford.face.contract.HeadPose;
 import com.microsoft.projectoxford.face.samples.R;
 import com.microsoft.projectoxford.face.samples.helper.ImageHelper;
 import com.microsoft.projectoxford.face.samples.helper.LogHelper;
@@ -89,8 +92,10 @@ public class DetectionActivity extends AppCompatActivity {
                         new FaceServiceClient.FaceAttributeType[] {
                                 FaceServiceClient.FaceAttributeType.Age,
                                 FaceServiceClient.FaceAttributeType.Gender,
-                                FaceServiceClient.FaceAttributeType.Glasses,
                                 FaceServiceClient.FaceAttributeType.Smile,
+                                FaceServiceClient.FaceAttributeType.Glasses,
+                                FaceServiceClient.FaceAttributeType.FacialHair,
+                                FaceServiceClient.FaceAttributeType.Emotion,
                                 FaceServiceClient.FaceAttributeType.HeadPose
                         });
             } catch (Exception e) {
@@ -366,15 +371,75 @@ public class DetectionActivity extends AppCompatActivity {
 
             // Show the face details.
             DecimalFormat formatter = new DecimalFormat("#0.0");
-            String face_description = "Age: " + formatter.format(faces.get(position).faceAttributes.age) + "\n"
-                    + "Gender: " + faces.get(position).faceAttributes.gender + "\n"
-                    + "Head pose(in degree): roll(" + formatter.format(faces.get(position).faceAttributes.headPose.roll) + "), "
-                    + "yaw(" + formatter.format(faces.get(position).faceAttributes.headPose.yaw) + ")\n"
-                    + "Glasses: " + faces.get(position).faceAttributes.glasses + "\n"
-                    + "Smile: " + formatter.format(faces.get(position).faceAttributes.smile);
+            String face_description = String.format("Age: %s\nGender: %s\nSmile: %s\nGlasses: %s\nFacialHair: %s\nHeadPose: %s",
+                    faces.get(position).faceAttributes.age,
+                    faces.get(position).faceAttributes.gender,
+                    faces.get(position).faceAttributes.smile,
+                    faces.get(position).faceAttributes.glasses,
+                    getFacialHair(faces.get(position).faceAttributes.facialHair),
+                    getEmotion(faces.get(position).faceAttributes.emotion),
+                    getHeadPose(faces.get(position).faceAttributes.headPose)
+                    );
             ((TextView) convertView.findViewById(R.id.text_detected_face)).setText(face_description);
 
             return convertView;
+        }
+
+        private String getFacialHair(FacialHair facialHair)
+        {
+            return (facialHair.moustache + facialHair.beard + facialHair.sideburns > 0) ? "Yes" : "No";
+        }
+
+        private String getEmotion(Emotion emotion)
+        {
+            String emotionType = "";
+            double emotionValue = 0.0;
+            if (emotion.anger > emotionValue)
+            {
+                emotionValue = emotion.anger;
+                emotionType = "Anger";
+            }
+            if (emotion.contempt > emotionValue)
+            {
+                emotionValue = emotion.contempt;
+                emotionType = "Contempt";
+            }
+            if (emotion.disgust > emotionValue)
+            {
+                emotionValue = emotion.disgust;
+                emotionType = "Disgust";
+            }
+            if (emotion.fear > emotionValue)
+            {
+                emotionValue = emotion.fear;
+                emotionType = "Fear";
+            }
+            if (emotion.happiness > emotionValue)
+            {
+                emotionValue = emotion.happiness;
+                emotionType = "Happiness";
+            }
+            if (emotion.neutral > emotionValue)
+            {
+                emotionValue = emotion.neutral;
+                emotionType = "Neutral";
+            }
+            if (emotion.sadness > emotionValue)
+            {
+                emotionValue = emotion.sadness;
+                emotionType = "Sadness";
+            }
+            if (emotion.surprise > emotionValue)
+            {
+                emotionValue = emotion.surprise;
+                emotionType = "Surprise";
+            }
+            return String.format("%s: %f", emotionType, emotionValue);
+        }
+
+        private String getHeadPose(HeadPose headPose)
+        {
+            return String.format("Pitch: %s, Roll: %s, Yaw: %s", headPose.pitch, headPose.roll, headPose.yaw);
         }
     }
 }
