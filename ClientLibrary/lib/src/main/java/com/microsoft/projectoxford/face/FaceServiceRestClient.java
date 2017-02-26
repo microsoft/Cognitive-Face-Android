@@ -68,7 +68,7 @@ public class FaceServiceRestClient implements FaceServiceClient {
     private final WebServiceRequest mRestCall;
     private Gson mGson = new GsonBuilder().setDateFormat("M/d/yyyy h:m:s a").create();
 
-    private static final String DEFAULT_API_ROOT = "https://api.projectoxford.ai/face/v1.0";
+    private static final String DEFAULT_API_ROOT = "https://westus.api.cognitive.microsoft.com/face/v1.0";
     private final String mServiceHost;
 
     private static final String DETECT_QUERY = "detect";
