@@ -111,7 +111,18 @@ public interface FaceServiceClient {
          * Analyses glasses type
          */
         Glasses {
-            public String toString() { return "glasses"; }
+            public String toString() {
+                return "glasses";
+            }
+        },
+
+        /**
+         * Analyses emotion type
+         */
+        Emotion {
+            public String toString() {
+                return "emotion";
+            }
         }
     }
 
