@@ -21,13 +21,10 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    //
 
     // Use the following line to include client library for Face API from Maven Central Repository
 
-    //
-
-    compile 'com.microsoft.projectoxford:face:1.2.1'
+    compile 'com.microsoft.projectoxford:face:1.2.5'
     compile 'com.android.support:appcompat-v7:22.1.0'
     compile 'com.google.code.gson:gson:2.3.1'
 }
