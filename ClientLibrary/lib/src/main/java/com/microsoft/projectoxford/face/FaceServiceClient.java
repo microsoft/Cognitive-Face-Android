@@ -392,6 +392,7 @@ public interface FaceServiceClient {
      * List the fist "top" of persons whose Id is lager than "start".
      * @param personGroupId The person group id.
      * @param start The persons Id bar, list persons whose Id is lager than "start.
+     * @param top The number of persons to list.
      * @return The person entity array.
      * @throws ClientException
      * @throws IOException
