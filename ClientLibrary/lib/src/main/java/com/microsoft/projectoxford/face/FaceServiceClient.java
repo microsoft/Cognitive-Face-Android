@@ -123,6 +123,55 @@ public interface FaceServiceClient {
             public String toString() {
                 return "emotion";
             }
+        },
+
+        /**
+         * Analyses hair type
+         */
+        Hair {
+            public String toString() { return "hair"; }
+        },
+
+        /**
+         * Analyses makeup type
+         */
+        Makeup {
+            public String toString() { return "makeup"; }
+        },
+
+        /**
+         * Analyses occlusion type
+         */
+        Occlusion {
+            public String toString() { return "occlusion"; }
+        },
+
+        /**
+         * Analyses accessories type
+         */
+        Accessories {
+            public String toString() { return "accessories"; }
+        },
+
+        /**
+         * Analyses noise type
+         */
+        Noise {
+            public String toString() { return "noise"; }
+        },
+
+        /**
+         * Analyses exposure type
+         */
+        Exposure {
+            public String toString() { return "exposure"; }
+        },
+
+        /**
+         * Analyses blur type
+         */
+        Blur {
+            public String toString() { return "blur"; }
         }
     }
 
@@ -329,13 +378,44 @@ public interface FaceServiceClient {
     Person getPerson(String personGroupId, UUID personId) throws ClientException, IOException;
 
     /**
-     * Gets all persons inside a person group.
+     * Gets 1000 persons inside a person group.
+     * @param personGroupId The person group id.
+     * @return The person entity array.
+     * @throws ClientException
+     * @throws IOException
+     * @deprecated use {@link #listPersons(String)} l} instead.
+     */
+    @Deprecated
+    Person[] getPersons(String personGroupId) throws ClientException, IOException;
+
+    /**
+     * List the fist "top" of persons whose Id is lager than "start".
+     * @param personGroupId The person group id.
+     * @param start The persons Id bar, list persons whose Id is lager than "start.
+     * @return The person entity array.
+     * @throws ClientException
+     * @throws IOException
+     */
+    Person[] listPersons(String personGroupId, String start, int top) throws ClientException, IOException;
+
+    /**
+     * List the fist "top" of persons whose Id is lager than "start".
+     * @param personGroupId The person group id.
+     * @param start The persons Id bar, list persons whose Id is lager than "start.
+     * @return The person entity array.
+     * @throws ClientException
+     * @throws IOException
+     */
+    Person[] listPersons(String personGroupId, String start) throws ClientException, IOException;
+
+    /**
+     * List the fist "top" of persons whose Id is lager than "start".
      * @param personGroupId The person group id.
      * @return The person entity array.
      * @throws ClientException
      * @throws IOException
      */
-    Person[] getPersons(String personGroupId) throws ClientException, IOException;
+    Person[] listPersons(String personGroupId) throws ClientException, IOException;
 
     /**
      * Adds a face to a person.
