@@ -32,32 +32,29 @@
 //
 package com.microsoft.projectoxford.face.contract;
 
-public class FaceAttribute {
-    public double age;
+/**
+ * Color type
+ */
+enum ColorType{
+    Unknown, White, Gray, Blond, Brown, Red, Black, Other
+}
 
-    public String gender;
+/**
+ * Hair color details
+ */
+class HairColor {
+    public ColorType color;
 
-    public double smile;
+    public double confidence;
+}
 
-    public FacialHair facialHair;
+/**
+ * Hair details
+ */
+public class Hair {
+    public double bald;
 
-    public HeadPose headPose;
+    public boolean invisible;
 
-    public Glasses glasses;
-
-    public Emotion emotion;
-
-    public Blur blur;
-
-    public Exposure exposure;
-
-    public Noise noise;
-
-    public Makeup makeup;
-
-    public Accessory[] accessories;
-
-    public Occlusion occlusion;
-
-    public Hair hair;
+    public HairColor[] hairColor;
 }

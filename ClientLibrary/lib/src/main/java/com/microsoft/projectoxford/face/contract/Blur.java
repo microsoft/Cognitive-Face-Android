@@ -32,32 +32,18 @@
 //
 package com.microsoft.projectoxford.face.contract;
 
-public class FaceAttribute {
-    public double age;
+/**
+ * Blur type
+ */
+enum BlurLevel{
+    Low, Medium, High
+}
 
-    public String gender;
+/**
+ * Blur details
+ */
+public class Blur {
+    public BlurLevel blurLevel;
 
-    public double smile;
-
-    public FacialHair facialHair;
-
-    public HeadPose headPose;
-
-    public Glasses glasses;
-
-    public Emotion emotion;
-
-    public Blur blur;
-
-    public Exposure exposure;
-
-    public Noise noise;
-
-    public Makeup makeup;
-
-    public Accessory[] accessories;
-
-    public Occlusion occlusion;
-
-    public Hair hair;
+    public double value;
 }
