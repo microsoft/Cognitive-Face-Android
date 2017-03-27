@@ -298,6 +298,11 @@ public class FaceServiceRestClient implements FaceServiceClient {
     }
 
     @Override
+    public PersonGroup[] listPersonGroups(int top) throws ClientException, IOException{
+        return listPersonGroups("", top);
+    }
+
+    @Override
     public PersonGroup[] listPersonGroups() throws ClientException, IOException {
         return listPersonGroups("", 1000);
     }
@@ -346,6 +351,11 @@ public class FaceServiceRestClient implements FaceServiceClient {
     @Override
     public Person[] listPersons(String personGroupId, String start) throws ClientException, IOException {
         return listPersons(personGroupId, start, 1000);
+    }
+
+    @Override
+    public Person[] listPersons(String personGroupId, int top) throws ClientException, IOException {
+        return listPersons(personGroupId, "", top);
     }
 
     public Person[] listPersons(String personGroupId) throws ClientException, IOException {

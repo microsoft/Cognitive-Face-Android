@@ -349,6 +349,15 @@ public interface FaceServiceClient {
     PersonGroup[] listPersonGroups(String start) throws ClientException, IOException;
 
     /**
+     *  List the fist "top" of person groups.
+     *  @param top The number of person groups to list.
+     * @return Person group entity array.
+     * @throws ClientException
+     * @throws IOException
+     */
+    PersonGroup[] listPersonGroups(int top) throws ClientException, IOException;
+
+    /**
      *  List the fist "top" of person groups whose Id is lager than "start".
      * @return Person group entity array.
      * @throws ClientException
@@ -410,7 +419,17 @@ public interface FaceServiceClient {
     Person[] listPersons(String personGroupId, String start) throws ClientException, IOException;
 
     /**
-     * List the fist "top" of persons whose Id is lager than "start".
+     * List the fist "top" of persons.
+     * @param personGroupId The person group id.
+     * @param top The number of persons to list.
+     * @return The person entity array.
+     * @throws ClientException
+     * @throws IOException
+     */
+    Person[] listPersons(String personGroupId, int top) throws ClientException, IOException;
+
+    /**
+     * List the fist 1000 persons.
      * @param personGroupId The person group id.
      * @return The person entity array.
      * @throws ClientException
