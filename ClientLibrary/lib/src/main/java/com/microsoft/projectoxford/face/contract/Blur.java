@@ -32,17 +32,24 @@
 //
 package com.microsoft.projectoxford.face.contract;
 
-/**
- * Blur type
- */
-enum BlurLevel{
-    Low, Medium, High
-}
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Blur details
  */
 public class Blur {
+    /**
+     * Blur type
+     */
+    public enum BlurLevel{
+        @SerializedName("low")
+        Low,
+        @SerializedName("medium")
+        Medium,
+        @SerializedName("high")
+        High
+    }
+
     public BlurLevel blurLevel;
 
     public double value;

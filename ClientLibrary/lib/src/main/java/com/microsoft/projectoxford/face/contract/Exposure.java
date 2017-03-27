@@ -32,17 +32,24 @@
 //
 package com.microsoft.projectoxford.face.contract;
 
-/**
- * Exposure type
- */
-enum ExposureLevel{
-    GoodExposure, UnderExposure, OverExposure
-}
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Exposure details
  */
 public class Exposure {
+    /**
+     * Exposure type
+     */
+    public enum ExposureLevel{
+        @SerializedName("goodExposure")
+        GoodExposure,
+        @SerializedName("underExposure")
+        UnderExposure,
+        @SerializedName("overExposure")
+        OverExposure
+    }
+
     public ExposureLevel exposureLevel;
 
     public double value;

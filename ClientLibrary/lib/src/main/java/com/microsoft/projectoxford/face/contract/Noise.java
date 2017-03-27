@@ -32,17 +32,24 @@
 //
 package com.microsoft.projectoxford.face.contract;
 
-/**
- * Noise level
- */
-enum NoiseLevel {
-    Low, Medium, High
-}
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Noise details
  */
 public class Noise {
+    /**
+     * Noise level
+     */
+    public enum NoiseLevel {
+        @SerializedName("low")
+        Low,
+        @SerializedName("medium")
+        Medium,
+        @SerializedName("high")
+        High
+    }
+
     public NoiseLevel noiseLevel;
 
     public double value;

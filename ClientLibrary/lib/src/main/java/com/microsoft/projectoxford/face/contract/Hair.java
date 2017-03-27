@@ -32,21 +32,7 @@
 //
 package com.microsoft.projectoxford.face.contract;
 
-/**
- * Color type
- */
-enum ColorType{
-    Unknown, White, Gray, Blond, Brown, Red, Black, Other
-}
-
-/**
- * Hair color details
- */
-class HairColor {
-    public ColorType color;
-
-    public double confidence;
-}
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Hair details
@@ -55,6 +41,37 @@ public class Hair {
     public double bald;
 
     public boolean invisible;
+
+    /**
+     * Hair color details
+     */
+    public static class HairColor{
+        /**
+         * Color type
+         */
+        public enum ColorType {
+            @SerializedName("unknown")
+            Unknown,
+            @SerializedName("white")
+            White,
+            @SerializedName("gray")
+            Gray,
+            @SerializedName("blond")
+            Blond,
+            @SerializedName("brown")
+            Brown,
+            @SerializedName("red")
+            Red,
+            @SerializedName("black")
+            Black,
+            @SerializedName("other")
+            Other
+        }
+
+        public ColorType color;
+
+        public double confidence;
+    };
 
     public HairColor[] hairColor;
 }

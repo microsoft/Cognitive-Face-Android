@@ -32,17 +32,24 @@
 //
 package com.microsoft.projectoxford.face.contract;
 
-/**
- * Accessory types
- */
-enum AccessoryType {
-    Headwear, Glasses, Mask
-}
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Accessory details
  */
 public class Accessory {
+    /**
+     * Accessory types
+     */
+    public enum AccessoryType {
+        @SerializedName("headwear")
+        Headwear,
+        @SerializedName("glasses")
+        Glasses,
+        @SerializedName("mask")
+        Mask
+    }
+
     public AccessoryType type;
 
     public double confidence;
