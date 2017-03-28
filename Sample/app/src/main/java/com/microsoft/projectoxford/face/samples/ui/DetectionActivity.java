@@ -76,9 +76,7 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 public class DetectionActivity extends AppCompatActivity {
     // Background task of face detection.
@@ -446,13 +444,13 @@ public class DetectionActivity extends AppCompatActivity {
             }
             else
             {
-                Set<String> accessoriesSet = new LinkedHashSet<>();
+                String[] accessoriesList = new String[accessories.length];
                 for (int i = 0; i < accessories.length; ++i)
                 {
-                    accessoriesSet.add(accessories[i].type.toString());
+                    accessoriesList[i] = accessories[i].type.toString();
                 }
 
-                return TextUtils.join(",", accessoriesSet);
+                return TextUtils.join(",", accessoriesList);
             }
         }
 
