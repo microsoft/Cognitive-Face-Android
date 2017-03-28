@@ -41,6 +41,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +76,9 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DetectionActivity extends AppCompatActivity {
     // Background task of face detection.
@@ -443,15 +446,13 @@ public class DetectionActivity extends AppCompatActivity {
             }
             else
             {
-                String accessoriesType = "";
-
-                for (int i = 0; i < accessories.length - 1; ++i)
+                Set<String> accessoriesSet = new LinkedHashSet<>();
+                for (int i = 0; i < accessories.length; ++i)
                 {
-                    accessoriesType = accessoriesType + accessories[i].type.toString() + " ";
+                    accessoriesSet.add(accessories[i].type.toString());
                 }
 
-                accessoriesType = accessoriesType + accessories[accessories.length - 1].type.toString();
-                return accessoriesType;
+                return TextUtils.join(",", accessoriesSet);
             }
         }
 
