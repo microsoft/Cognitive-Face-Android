@@ -35,7 +35,7 @@ package com.microsoft.projectoxford.face.contract;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Accessory details
+ * Accessory class contains accessory information
  */
 public class Accessory {
     /**
@@ -50,7 +50,13 @@ public class Accessory {
         Mask
     }
 
+    /**
+     * Indicating the accessory type
+     */
     public AccessoryType type;
 
+    /**
+     * Indicating the confidence for accessory type
+     */
     public double confidence;
 }

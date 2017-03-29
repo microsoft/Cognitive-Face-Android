@@ -35,11 +35,17 @@ package com.microsoft.projectoxford.face.contract;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Hair details
+ * Hair class contains hair color information
  */
 public class Hair {
+    /**
+     * Indicating the confidence of a bald head
+     */
     public double bald;
 
+    /**
+     * Indicating whether hair is occluded or not
+     */
     public boolean invisible;
 
     /**
@@ -47,9 +53,9 @@ public class Hair {
      */
     public static class HairColor{
         /**
-         * Color type
+         * Hair color type
          */
-        public enum ColorType {
+        public enum HairColorType {
             @SerializedName("unknown")
             Unknown,
             @SerializedName("white")
@@ -68,10 +74,19 @@ public class Hair {
             Other
         }
 
-        public ColorType color;
+        /**
+         * Indicating the hair color type
+         */
+        public HairColorType color;
 
+        /**
+         * Indicating the confidence for hair color type
+         */
         public double confidence;
     };
 
+    /**
+     * Indicating all possible hair colors with confidences
+     */
     public HairColor[] hairColor;
 }
