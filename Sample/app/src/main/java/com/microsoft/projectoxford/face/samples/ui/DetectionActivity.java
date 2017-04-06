@@ -387,7 +387,7 @@ public class DetectionActivity extends AppCompatActivity {
             // Show the face details.
             DecimalFormat formatter = new DecimalFormat("#0.0");
             String face_description = String.format("Age: %s  Gender: %s\nHair: %s  FacialHair: %s\nMakeup: %s  %s\nForeheadOccluded: %s  Blur: %s\nEyeOccluded: %s  %s\n" +
-                            "MouthOccluded: %s  Noise: %s\nHeadPose: %s\n%s",
+                            "MouthOccluded: %s  Noise: %s\nGlassesType: %s\nHeadPose: %s\nAccessories: %s",
                     faces.get(position).faceAttributes.age,
                     faces.get(position).faceAttributes.gender,
                     getHair(faces.get(position).faceAttributes.hair),
@@ -400,6 +400,7 @@ public class DetectionActivity extends AppCompatActivity {
                     faces.get(position).faceAttributes.exposure.exposureLevel,
                     faces.get(position).faceAttributes.occlusion.mouthOccluded,
                     faces.get(position).faceAttributes.noise.noiseLevel,
+                    faces.get(position).faceAttributes.glasses,
                     getHeadPose(faces.get(position).faceAttributes.headPose),
                     getAccessories(faces.get(position).faceAttributes.accessories)
                     );
