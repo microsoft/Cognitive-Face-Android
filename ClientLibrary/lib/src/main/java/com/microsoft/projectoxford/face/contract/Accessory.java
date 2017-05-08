@@ -32,32 +32,31 @@
 //
 package com.microsoft.projectoxford.face.contract;
 
-public class FaceAttribute {
-    public double age;
+import com.google.gson.annotations.SerializedName;
 
-    public String gender;
+/**
+ * Accessory class contains accessory information
+ */
+public class Accessory {
+    /**
+     * Accessory types
+     */
+    public enum AccessoryType {
+        @SerializedName("headwear")
+        Headwear,
+        @SerializedName("glasses")
+        Glasses,
+        @SerializedName("mask")
+        Mask
+    }
 
-    public double smile;
+    /**
+     * Indicating the accessory type
+     */
+    public AccessoryType type;
 
-    public FacialHair facialHair;
-
-    public HeadPose headPose;
-
-    public Glasses glasses;
-
-    public Emotion emotion;
-
-    public Blur blur;
-
-    public Exposure exposure;
-
-    public Noise noise;
-
-    public Makeup makeup;
-
-    public Accessory[] accessories;
-
-    public Occlusion occlusion;
-
-    public Hair hair;
+    /**
+     * Indicating the confidence for accessory type
+     */
+    public double confidence;
 }

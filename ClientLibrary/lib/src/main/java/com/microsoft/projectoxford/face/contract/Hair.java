@@ -32,32 +32,61 @@
 //
 package com.microsoft.projectoxford.face.contract;
 
-public class FaceAttribute {
-    public double age;
+import com.google.gson.annotations.SerializedName;
 
-    public String gender;
+/**
+ * Hair class contains hair color information
+ */
+public class Hair {
+    /**
+     * Indicating the confidence of a bald head
+     */
+    public double bald;
 
-    public double smile;
+    /**
+     * Indicating whether hair is occluded or not
+     */
+    public boolean invisible;
 
-    public FacialHair facialHair;
+    /**
+     * Hair color details
+     */
+    public static class HairColor{
+        /**
+         * Hair color type
+         */
+        public enum HairColorType {
+            @SerializedName("unknown")
+            Unknown,
+            @SerializedName("white")
+            White,
+            @SerializedName("gray")
+            Gray,
+            @SerializedName("blond")
+            Blond,
+            @SerializedName("brown")
+            Brown,
+            @SerializedName("red")
+            Red,
+            @SerializedName("black")
+            Black,
+            @SerializedName("other")
+            Other
+        }
 
-    public HeadPose headPose;
+        /**
+         * Indicating the hair color type
+         */
+        public HairColorType color;
 
-    public Glasses glasses;
+        /**
+         * Indicating the confidence for hair color type
+         */
+        public double confidence;
+    };
 
-    public Emotion emotion;
-
-    public Blur blur;
-
-    public Exposure exposure;
-
-    public Noise noise;
-
-    public Makeup makeup;
-
-    public Accessory[] accessories;
-
-    public Occlusion occlusion;
-
-    public Hair hair;
+    /**
+     * Indicating all possible hair colors with confidences
+     */
+    public HairColor[] hairColor;
 }

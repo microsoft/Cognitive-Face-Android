@@ -298,6 +298,11 @@ public class FaceServiceRestClient implements FaceServiceClient {
     }
 
     @Override
+    public PersonGroup[] listPersonGroups(int top) throws ClientException, IOException{
+        return listPersonGroups("", top);
+    }
+
+    @Override
     public PersonGroup[] listPersonGroups() throws ClientException, IOException {
         return listPersonGroups("", 1000);
     }
@@ -325,16 +330,36 @@ public class FaceServiceRestClient implements FaceServiceClient {
         return mGson.fromJson(json, Person.class);
     }
 
+    @Deprecated
     @Override
     public Person[] getPersons(String personGroupId) throws ClientException, IOException {
+        return listPersons(personGroupId, "", 1000);
+    }
+
+    @Override
+    public Person[] listPersons(String personGroupId, String start, int top) throws ClientException, IOException {
         Map<String, Object> params = new HashMap<>();
 
-        String uri = String.format("%s/%s/%s/%s", mServiceHost, PERSON_GROUPS_QUERY, personGroupId, PERSONS_QUERY);
+        String uri = String.format("%s/%s/%s/%s?start=%s&top=%s", mServiceHost, PERSON_GROUPS_QUERY, personGroupId, PERSONS_QUERY, start, top);
         String json = (String)mRestCall.request(uri, RequestMethod.GET, params, null);
         Type listType = new TypeToken<List<Person>>() {
         }.getType();
         List<Person> result = mGson.fromJson(json, listType);
         return result.toArray(new Person[result.size()]);
+    }
+
+    @Override
+    public Person[] listPersons(String personGroupId, String start) throws ClientException, IOException {
+        return listPersons(personGroupId, start, 1000);
+    }
+
+    @Override
+    public Person[] listPersons(String personGroupId, int top) throws ClientException, IOException {
+        return listPersons(personGroupId, "", top);
+    }
+
+    public Person[] listPersons(String personGroupId) throws ClientException, IOException {
+        return listPersons(personGroupId, "", 1000);
     }
 
     @Override

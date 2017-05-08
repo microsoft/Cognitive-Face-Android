@@ -41,6 +41,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +56,13 @@ import com.microsoft.projectoxford.face.contract.Emotion;
 import com.microsoft.projectoxford.face.contract.Face;
 import com.microsoft.projectoxford.face.contract.FacialHair;
 import com.microsoft.projectoxford.face.contract.HeadPose;
+import com.microsoft.projectoxford.face.contract.Accessory;
+import com.microsoft.projectoxford.face.contract.Blur;
+import com.microsoft.projectoxford.face.contract.Exposure;
+import com.microsoft.projectoxford.face.contract.Hair;
+import com.microsoft.projectoxford.face.contract.Makeup;
+import com.microsoft.projectoxford.face.contract.Noise;
+import com.microsoft.projectoxford.face.contract.Occlusion;
 import com.microsoft.projectoxford.face.samples.R;
 import com.microsoft.projectoxford.face.samples.helper.ImageHelper;
 import com.microsoft.projectoxford.face.samples.helper.LogHelper;
@@ -96,7 +104,14 @@ public class DetectionActivity extends AppCompatActivity {
                                 FaceServiceClient.FaceAttributeType.Glasses,
                                 FaceServiceClient.FaceAttributeType.FacialHair,
                                 FaceServiceClient.FaceAttributeType.Emotion,
-                                FaceServiceClient.FaceAttributeType.HeadPose
+                                FaceServiceClient.FaceAttributeType.HeadPose,
+                                FaceServiceClient.FaceAttributeType.Accessories,
+                                FaceServiceClient.FaceAttributeType.Blur,
+                                FaceServiceClient.FaceAttributeType.Exposure,
+                                FaceServiceClient.FaceAttributeType.Hair,
+                                FaceServiceClient.FaceAttributeType.Makeup,
+                                FaceServiceClient.FaceAttributeType.Noise,
+                                FaceServiceClient.FaceAttributeType.Occlusion
                         });
             } catch (Exception e) {
                 mSucceed = false;
@@ -371,22 +386,77 @@ public class DetectionActivity extends AppCompatActivity {
 
             // Show the face details.
             DecimalFormat formatter = new DecimalFormat("#0.0");
-            String face_description = String.format("Age: %s\nGender: %s\nSmile: %s\nGlasses: %s\nFacialHair: %s\nHeadPose: %s",
+            String face_description = String.format("Age: %s  Gender: %s\nHair: %s  FacialHair: %s\nMakeup: %s  %s\nForeheadOccluded: %s  Blur: %s\nEyeOccluded: %s  %s\n" +
+                            "MouthOccluded: %s  Noise: %s\nGlassesType: %s\nHeadPose: %s\nAccessories: %s",
                     faces.get(position).faceAttributes.age,
                     faces.get(position).faceAttributes.gender,
-                    faces.get(position).faceAttributes.smile,
-                    faces.get(position).faceAttributes.glasses,
+                    getHair(faces.get(position).faceAttributes.hair),
                     getFacialHair(faces.get(position).faceAttributes.facialHair),
+                    getMakeup((faces.get(position)).faceAttributes.makeup),
                     getEmotion(faces.get(position).faceAttributes.emotion),
-                    getHeadPose(faces.get(position).faceAttributes.headPose)
+                    faces.get(position).faceAttributes.occlusion.foreheadOccluded,
+                    faces.get(position).faceAttributes.blur.blurLevel,
+                    faces.get(position).faceAttributes.occlusion.eyeOccluded,
+                    faces.get(position).faceAttributes.exposure.exposureLevel,
+                    faces.get(position).faceAttributes.occlusion.mouthOccluded,
+                    faces.get(position).faceAttributes.noise.noiseLevel,
+                    faces.get(position).faceAttributes.glasses,
+                    getHeadPose(faces.get(position).faceAttributes.headPose),
+                    getAccessories(faces.get(position).faceAttributes.accessories)
                     );
             ((TextView) convertView.findViewById(R.id.text_detected_face)).setText(face_description);
 
             return convertView;
         }
 
-        private String getFacialHair(FacialHair facialHair)
-        {
+        private String getHair(Hair hair) {
+            if (hair.hairColor.length == 0)
+            {
+                if (hair.invisible)
+                    return "Invisible";
+                else
+                    return "Bald";
+            }
+            else
+            {
+                int maxConfidenceIndex = 0;
+                double maxConfidence = 0.0;
+
+                for (int i = 0; i < hair.hairColor.length; ++i)
+                {
+                    if (hair.hairColor[i].confidence > maxConfidence)
+                    {
+                        maxConfidence = hair.hairColor[i].confidence;
+                        maxConfidenceIndex = i;
+                    }
+                }
+
+                return hair.hairColor[maxConfidenceIndex].color.toString();
+            }
+        }
+
+        private String getMakeup(Makeup makeup) {
+            return  (makeup.eyeMakeup || makeup.lipMakeup) ? "Yes" : "No" ;
+        }
+
+        private String getAccessories(Accessory[] accessories) {
+            if (accessories.length == 0)
+            {
+                return "NoAccessories";
+            }
+            else
+            {
+                String[] accessoriesList = new String[accessories.length];
+                for (int i = 0; i < accessories.length; ++i)
+                {
+                    accessoriesList[i] = accessories[i].type.toString();
+                }
+
+                return TextUtils.join(",", accessoriesList);
+            }
+        }
+
+        private String getFacialHair(FacialHair facialHair) {
             return (facialHair.moustache + facialHair.beard + facialHair.sideburns > 0) ? "Yes" : "No";
         }
 

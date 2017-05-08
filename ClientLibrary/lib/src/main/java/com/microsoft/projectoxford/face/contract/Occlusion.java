@@ -32,32 +32,22 @@
 //
 package com.microsoft.projectoxford.face.contract;
 
-public class FaceAttribute {
-    public double age;
+/**
+ * Occlusion class contains occlusion information
+ */
+public class Occlusion {
+    /**
+     * Indicating whether forehead is occluded or not
+     */
+    public boolean foreheadOccluded;
 
-    public String gender;
+    /**
+     * Indicating whether eye is occluded or not
+     */
+    public boolean eyeOccluded;
 
-    public double smile;
-
-    public FacialHair facialHair;
-
-    public HeadPose headPose;
-
-    public Glasses glasses;
-
-    public Emotion emotion;
-
-    public Blur blur;
-
-    public Exposure exposure;
-
-    public Noise noise;
-
-    public Makeup makeup;
-
-    public Accessory[] accessories;
-
-    public Occlusion occlusion;
-
-    public Hair hair;
+    /**
+     * Indicating whether mouth is occluded or not
+     */
+    public boolean mouthOccluded;
 }

@@ -32,32 +32,43 @@
 //
 package com.microsoft.projectoxford.face.contract;
 
-public class FaceAttribute {
-    public double age;
+import com.google.gson.annotations.SerializedName;
 
-    public String gender;
+/**
+ * Exposure class contains exposure information
+ */
+public class Exposure {
+    /**
+     * Definition of exposure level
+     */
+    public enum ExposureLevel{
+        /**
+         * Indicating face image is in under exposure
+         */
+        @SerializedName("underExposure")
+        UnderExposure,
+        /**
+         * Indicating face image is in good exposure
+         */
+        @SerializedName("goodExposure")
+        GoodExposure,
+        /**
+         * Indicating face image is in over exposure
+         */
+        @SerializedName("overExposure")
+        OverExposure
+    }
 
-    public double smile;
+    /**
+     * Indicating exposure level of face image
+     */
+    public ExposureLevel exposureLevel;
 
-    public FacialHair facialHair;
-
-    public HeadPose headPose;
-
-    public Glasses glasses;
-
-    public Emotion emotion;
-
-    public Blur blur;
-
-    public Exposure exposure;
-
-    public Noise noise;
-
-    public Makeup makeup;
-
-    public Accessory[] accessories;
-
-    public Occlusion occlusion;
-
-    public Hair hair;
+    /**
+     * Exposure value is in range [0, 1]. Larger value means the face image is more brighter.
+     * [0, 0.25) is under exposure.
+     * [0.25, 0.75) is good exposure.
+     * [0.75, 1] is over exposure.
+     */
+    public double value;
 }
