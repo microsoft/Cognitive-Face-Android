@@ -37,7 +37,7 @@ import java.util.UUID;
 public class Person {
     public UUID personId;
 
-    public UUID[] faceIds;
+    public UUID[] persistedFaceIds;
 
     public String name;
 
