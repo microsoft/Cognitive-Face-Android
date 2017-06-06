@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (getString(R.string.subscription_key).startsWith("Please!!")) {
+        if (getString(R.string.subscription_key).startsWith("Please£¡£¡")) {
             new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.add_subscription_key_tip_title))
                     .setMessage(getString(R.string.add_subscription_key_tip))
