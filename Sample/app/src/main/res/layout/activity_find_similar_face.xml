@@ -128,7 +128,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/similar_face_description" />
+            android:text="@string/similar_person_description" />
 
         <GridView
             android:id="@+id/similar_faces"

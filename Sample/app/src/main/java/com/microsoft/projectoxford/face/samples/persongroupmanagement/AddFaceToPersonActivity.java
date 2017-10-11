@@ -96,7 +96,7 @@ public class AddFaceToPersonActivity extends AppCompatActivity {
                     FaceRectangle faceRect = mFaceGridViewAdapter.faceRectList.get(index);
                     addLog("Request: Adding face to person " + mPersonId);
                     // Start the request to add face.
-                    AddPersistedFaceResult result = faceServiceClient.addPersonFace(
+                    AddPersistedFaceResult result = faceServiceClient.addPersonFaceInLargePersonGroup(
                             mPersonGroupId,
                             personId,
                             imageInputStream,
@@ -356,7 +356,7 @@ public class AddFaceToPersonActivity extends AppCompatActivity {
                         faceIdList.add(null);
                         faceRectList.add(face.faceRectangle);
 
-                        faceChecked.add(false);
+                        faceChecked.add(true);
                     } catch (IOException e) {
                         // Show the exception when generating face thumbnail fails.
                         setInfo(e.getMessage());

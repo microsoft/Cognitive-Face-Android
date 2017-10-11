@@ -77,7 +77,8 @@
     <string name="target_face">Target face:</string>
     <string name="all_faces">All Faces:</string>
     <string name="add_faces">Add\nFaces</string>
-    <string name="similar_face_description">Finding 4 matchFace faces...</string>
+    <string name="similar_person_description">Finding matchPerson people...</string>
+    <string name="similar_face_description">Finding matchFace faces...</string>
 
     <!-- Common in all activities -->
     <string name="progress_dialog_title">Please wait</string>

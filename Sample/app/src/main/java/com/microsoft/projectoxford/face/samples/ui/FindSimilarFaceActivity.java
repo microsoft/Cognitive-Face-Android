@@ -51,10 +51,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
 import com.microsoft.projectoxford.face.FaceServiceClient;
+import com.microsoft.projectoxford.face.contract.AddPersistedFaceResult;
 import com.microsoft.projectoxford.face.contract.Face;
+import com.microsoft.projectoxford.face.contract.FaceRectangle;
 import com.microsoft.projectoxford.face.contract.SimilarFace;
+import com.microsoft.projectoxford.face.contract.SimilarPersistedFace;
 import com.microsoft.projectoxford.face.samples.R;
 import com.microsoft.projectoxford.face.samples.helper.ImageHelper;
 import com.microsoft.projectoxford.face.samples.helper.LogHelper;
@@ -74,25 +76,25 @@ import java.util.UUID;
 
 
 public class FindSimilarFaceActivity extends AppCompatActivity {
-    // Background task for finding personal similar faces.
-    private class FindPersonalSimilarFaceTask extends AsyncTask<UUID, String, SimilarFace[]> {
+
+    private class FindLargeFaceListSimilarFaceTask extends AsyncTask<UUID, String, SimilarPersistedFace[]> {
+
         private boolean mSucceed = true;
         @Override
-        protected SimilarFace[] doInBackground(UUID... params) {
+        protected SimilarPersistedFace[] doInBackground(UUID... params) {
             // Get an instance of face service client to detect faces in image.
             FaceServiceClient faceServiceClient = SampleApp.getFaceServiceClient();
-            addLog("Request: Find matchPerson similar faces to " + params[0].toString() +
-                    " in " + (params.length - 1) + " face(s)");
+            addLog("Request: Find matchPerson similar faces to " + params[0] +
+                    " in " + mLargeFaceListId);
             try{
                 publishProgress("Finding Similar Faces...");
 
-                UUID[] faceIds = Arrays.copyOfRange(params, 1, params.length);
                 // Start find similar faces.
-                return faceServiceClient.findSimilar(
+                return faceServiceClient.findSimilarInLargeFaceList(
                         params[0],  /* The target face ID */
-                        faceIds,    /*candidate faces */
-                        4 /*max number of candidate returned*/
-                        );
+                        mLargeFaceListId,    /* large face list id */
+                        4 /* max number of candidate returned*/
+                );
             }  catch (Exception e) {
                 mSucceed = false;
                 publishProgress(e.getMessage());
@@ -113,38 +115,39 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(SimilarFace[] result) {
+        protected void onPostExecute(SimilarPersistedFace[] result) {
             if (mSucceed) {
                 String resultString = "Found "
                         + (result == null ? "0": result.length)
-                        + " matchPerson similar face" + ((result != null && result.length != 1)? "s": "");
+                        + " matchPerson similar persisted face" + ((result != null && result.length != 1)? "s": "");
                 addLog("Response: Success. " + resultString);
                 setInfo(resultString);
             }
 
             // Show the result on screen when verification is done.
-            setUiAfterFindPersonalSimilarFaces(result);
+            setUiAfterFindLargeFaceListSimilarFaces(result);
         }
     }
 
-    // Background task for finding facial similar faces.
-    private class FindFacialSimilarFaceTask extends AsyncTask<UUID, String, SimilarFace[]> {
+    private class FindLargeFaceListFaceSimilarFaceTask extends AsyncTask<UUID, String, SimilarPersistedFace[]> {
+
         private boolean mSucceed = true;
         @Override
-        protected SimilarFace[] doInBackground(UUID... params) {
+        protected SimilarPersistedFace[] doInBackground(UUID... params) {
             // Get an instance of face service client to detect faces in image.
             FaceServiceClient faceServiceClient = SampleApp.getFaceServiceClient();
-            addLog("Request: Find matchFace similar faces to " + params[0].toString() +
-                    " in " + (params.length - 1) + " face(s)");
+            addLog("Request: Find matchPerson similar faces to " + params[0] +
+                    " in " + mLargeFaceListId);
             try{
+                publishProgress("Finding Similar Faces...");
 
-                UUID[] faceIds = Arrays.copyOfRange(params, 1, params.length);
                 // Start find similar faces.
-                return faceServiceClient.findSimilar(
-                        params[0],  /*candidate faces */
-                        faceIds,      /* The first face ID to verify */
-                        4, /*max number of candidate returned*/
-                        FaceServiceClient.FindSimilarMatchMode.matchFace);      /*The mode option indicating which method to use, the other option is "matchFirst"*/
+                return faceServiceClient.findSimilarInLargeFaceList(
+                        params[0],  /* The target face ID */
+                        mLargeFaceListId,    /* large face list id */
+                        4, /* max number of candidate returned*/
+                        FaceServiceClient.FindSimilarMatchMode.matchFace
+                );
             }  catch (Exception e) {
                 mSucceed = false;
                 publishProgress(e.getMessage());
@@ -165,22 +168,19 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(SimilarFace[] result) {
+        protected void onPostExecute(SimilarPersistedFace[] result) {
             if (mSucceed) {
                 String resultString = "Found "
                         + (result == null ? "0": result.length)
-                        + " matchFace similar face" + ((result != null && result.length != 1)? "s": "");
+                        + " matchFace similar persisted face" + ((result != null && result.length != 1)? "s": "");
                 addLog("Response: Success. " + resultString);
-                appendInfo((result == null ? "0": result.length)
-                        + " matchFace similar face" + ((result != null && result.length != 1)? "s": ""));
+                setInfo(resultString);
             }
 
             // Show the result on screen when verification is done.
-            setUiAfterFindFacialSimilarFaces(result);
+            setUiAfterFindFaceLargeFaceListSimilarFaces(result);
         }
     }
-
-
     // Background task for face detection
     class DetectionTask extends AsyncTask<InputStream, String, Face[]> {
         private boolean mSucceed = true;
@@ -226,33 +226,189 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
             if (mSucceed) {
                 addLog("Response: Success. Detected " + result.length + " Face(s) in image");
             }
-            if (mRequestCode == REQUEST_ADD_FACE) {
-                setUiAfterDetectionForAddFace(result);
-            } else if (mRequestCode == REQUEST_SELECT_IMAGE) {
+            if (mRequestCode == REQUEST_SELECT_IMAGE) {
                 setUiAfterDetectionForSelectImage(result);
             }
         }
     }
 
-    void setUiAfterFindPersonalSimilarFaces(SimilarFace[] result) {
+    class CreateLargeFaceListTask extends AsyncTask<String, String, String> {
+        private boolean mSucceed = true;
+        CreateLargeFaceListTask(String largeFaceListId) {
+            mLargeFaceListId = largeFaceListId;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            FaceServiceClient faceServiceClient = SampleApp.getFaceServiceClient();
+            try{
+                // Start detection.
+                faceServiceClient.createLargeFaceList(mLargeFaceListId,"name","userData");
+                return params[0];
+            }  catch (Exception e) {
+                mSucceed = false;
+                publishProgress(e.getMessage());
+                addLog(e.getMessage());
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            setUiDuringBackgroundTask(values[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (mSucceed) {
+                addLog("Response: Success. Create Large Face List " + result);
+            }
+        }
+    }
+
+    class AddFaceInLargeFaceListTask extends AsyncTask<InputStream, String, AddPersistedFaceResult> {
+
+        private boolean mSucceed = true;
+        int mRequestCode;
+        InputStream[] p;
+        AddFaceInLargeFaceListTask(int requestCode) {
+            mRequestCode = requestCode;
+        }
+
+        @Override
+        protected AddPersistedFaceResult doInBackground(InputStream... params) {
+            // Get an instance of face service client to detect faces in image.
+            FaceServiceClient faceServiceClient = SampleApp.getFaceServiceClient();
+            try{
+                publishProgress("Add face...");
+                p = params;
+                // Start detection.
+                return faceServiceClient.AddFaceToLargeFaceList(
+                        mLargeFaceListId,
+                        params[0],  /* Input stream of image to detect */
+                        "userData",       /* user data */
+                        null);
+            }  catch (Exception e) {
+                mSucceed = false;
+                publishProgress(e.getMessage());
+                addLog(e.getMessage());
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            mProgressDialog.show();
+        }
+
+        @Override
+        protected void onProgressUpdate(String... progress) {
+            setUiDuringBackgroundTask(progress[0]);
+        }
+
+        @Override
+        protected void onPostExecute(AddPersistedFaceResult result) {
+            if (mSucceed) {
+                addLog("Response: Success. Add Face " + result + " in image");
+                mProgressDialog.dismiss();
+                setUiAfterAddFace(result);
+            }
+        }
+    }
+
+    class DeleteLargeFaceListTask extends AsyncTask<String, String, String> {
+
+        private boolean mSucceed = true;
+
+        @Override
+        protected String doInBackground(String... params) {
+            FaceServiceClient faceServiceClient = SampleApp.getFaceServiceClient();
+            try{
+                // Start detection.
+                addLog("Request: Delete Large Face List " + params[0]);
+                faceServiceClient.deleteLargeFaceList(params[0]);
+                return params[0];
+            }  catch (Exception e) {
+                mSucceed = false;
+                publishProgress(e.getMessage());
+                addLog(e.getMessage());
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            setUiDuringBackgroundTask(values[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (mSucceed) {
+                addLog("Response: Success. Delete Large Face List " + result);
+            }
+        }
+    }
+
+    class TrainLargeFaceListTask extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            addLog("Request: Training face list " + params[0]);
+
+            // Get an instance of face service client.
+            FaceServiceClient faceServiceClient = SampleApp.getFaceServiceClient();
+            try{
+                faceServiceClient.trainLargeFaceList(params[0]);
+                return params[0];
+            } catch (Exception e) {
+                publishProgress(e.getMessage());
+                addLog(e.getMessage());
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(String... progress) {
+            setUiDuringBackgroundTask(progress[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (result != null) {
+                addLog("Response: Success. Large face list " + result + " training completed");
+            }
+        }
+    }
+
+    void setUiAfterFindLargeFaceListSimilarFaces(SimilarPersistedFace[] result) {
         mProgressDialog.dismiss();
 
         setAllButtonsEnabledStatus(true);
 
         // Show the result of face finding similar faces.
         GridView similarFaces = (GridView) findViewById(R.id.similar_faces);
-        mSimilarFaceListAdapter = new SimilarFaceListAdapter(result);
-        similarFaces.setAdapter(mSimilarFaceListAdapter);
+        mLargeSimilarFaceListAdapter = new SimilarLargeFaceListAdapter(result);
+        similarFaces.setAdapter(mLargeSimilarFaceListAdapter);
     }
-    void setUiAfterFindFacialSimilarFaces(SimilarFace[] result) {
+
+    void setUiAfterFindFaceLargeFaceListSimilarFaces(SimilarPersistedFace[] result) {
         mProgressDialog.dismiss();
 
         setAllButtonsEnabledStatus(true);
 
         // Show the result of face finding similar faces.
         GridView similarFaces = (GridView) findViewById(R.id.facial_similar_faces);
-        mSimilarFaceListAdapter = new SimilarFaceListAdapter(result);
-        similarFaces.setAdapter(mSimilarFaceListAdapter);
+        mLargeSimilarFaceListAdapter = new SimilarLargeFaceListAdapter(result);
+        similarFaces.setAdapter(mLargeSimilarFaceListAdapter);
     }
 
     void setUiDuringBackgroundTask(String progress) {
@@ -261,11 +417,11 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
         setInfo(progress);
     }
 
-    void setUiAfterDetectionForAddFace(Face[] result) {
+    void setUiAfterAddFace(AddPersistedFaceResult result) {
         setAllButtonsEnabledStatus(true);
 
         // Show the detailed list of original faces.
-        mFaceListAdapter.addFaces(result, mBitmap);
+        mFaceListAdapter.addFaces(null, result, mBitmap);
 
         GridView listView = (GridView) findViewById(R.id.all_faces);
         listView.setAdapter(mFaceListAdapter);
@@ -289,7 +445,7 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
 
         // Show the detailed list of detected faces.
         mTargetFaceListAdapter = new FaceListAdapter();
-        mTargetFaceListAdapter.addFaces(result, mTargetBitmap);
+        mTargetFaceListAdapter.addFaces(result, null, mTargetBitmap);
 
         // Show the list of detected face thumbnails.
         ListView listView = (ListView) findViewById(R.id.list_faces);
@@ -297,7 +453,7 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
 
         // Set the default face ID to the ID of first face, if one or more faces are detected.
         if (mTargetFaceListAdapter.faces.size() != 0) {
-            mFaceId = mTargetFaceListAdapter.faces.get(0).faceId;
+            mFaceId = mTargetFaceListAdapter.faces.get(0);
             // Show the thumbnail of the default face.
             ImageView imageView = (ImageView) findViewById(R.id.image);
             imageView.setImageBitmap(mTargetFaceListAdapter.faceThumbnails.get(0));
@@ -334,7 +490,7 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
     FaceListAdapter mTargetFaceListAdapter;
 
     // The face collection view adapter.
-    SimilarFaceListAdapter mSimilarFaceListAdapter;
+    SimilarLargeFaceListAdapter mLargeSimilarFaceListAdapter;
 
     // Flag to indicate which task is to be performed.
     protected static final int REQUEST_ADD_FACE = 0;
@@ -344,6 +500,8 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
 
     // The ID of the target face to find similar face.
     private UUID mFaceId;
+
+    private String mLargeFaceListId;
 
     // Progress dialog popped up when communicating with server.
     ProgressDialog mProgressDialog;
@@ -358,9 +516,13 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setTitle(getString(R.string.progress_dialog_title));
 
+        initializeFaceList();
+
         setFindSimilarFaceButtonEnabledStatus(false);
 
-        initializeFaceList();
+        mLargeFaceListId = UUID.randomUUID().toString();
+
+        new CreateLargeFaceListTask(mLargeFaceListId).execute(mLargeFaceListId);
 
         LogHelper.clearFindSimilarFaceLog();
     }
@@ -383,9 +545,9 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
 
                     setAllButtonsEnabledStatus(false);
 
-                    addLog("Request: Detecting in image " + data.getData());
-                    // Start a background task to detect faces in the image.
-                    new DetectionTask(REQUEST_ADD_FACE).execute(inputStream);
+                    addLog("Request: Add Face " + data.getData());
+                    // Start a background task to add face in the large face list.
+                    new AddFaceInLargeFaceListTask(REQUEST_ADD_FACE).execute(inputStream);
                 }
             }
         } else if (requestCode == REQUEST_SELECT_IMAGE) {
@@ -404,7 +566,7 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
 
                     setAllButtonsEnabledStatus(false);
 
-                    addLog("Request: Detecting in image " + data.getData());
+                    addLog("Request: Detecting target in image " + data.getData());
                     // Start a background task to detect faces in the image.
                     new DetectionTask(REQUEST_SELECT_IMAGE).execute(inputStream);
                 }
@@ -452,20 +614,20 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FaceListAdapter faceListAdapter = mTargetFaceListAdapter;
 
-                if (!faceListAdapter.faces.get(position).faceId.equals(mFaceId)) {
-                    mFaceId = faceListAdapter.faces.get(position).faceId;
+                if (!faceListAdapter.faces.get(position).equals(mFaceId)) {
+                    mFaceId = faceListAdapter.faces.get(position);
 
                     ImageView imageView = (ImageView) findViewById(R.id.image);
                     imageView.setImageBitmap(faceListAdapter.faceThumbnails.get(position));
 
                     // Clear the result of finding similar faces.
                     GridView similarFaces = (GridView) findViewById(R.id.similar_faces);
-                    mSimilarFaceListAdapter = new SimilarFaceListAdapter(null);
-                    similarFaces.setAdapter(mSimilarFaceListAdapter);
+                    mLargeSimilarFaceListAdapter = new SimilarLargeFaceListAdapter(null);
+                    similarFaces.setAdapter(mLargeSimilarFaceListAdapter);
 
                     similarFaces = (GridView) findViewById(R.id.facial_similar_faces);
-                    mSimilarFaceListAdapter = new SimilarFaceListAdapter(null);
-                    similarFaces.setAdapter(mSimilarFaceListAdapter);
+                    mLargeSimilarFaceListAdapter = new SimilarLargeFaceListAdapter(null);
+                    similarFaces.setAdapter(mLargeSimilarFaceListAdapter);
 
                     setInfo("");
                 }
@@ -475,6 +637,7 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
                 listView.setAdapter(faceListAdapter);
             }
         });
+        new DeleteLargeFaceListTask().execute(mLargeFaceListId);
     }
 
     public void addFaces(View view) {
@@ -486,15 +649,11 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
         if (mFaceId == null || mFaceListAdapter.faces.size() == 0) {
             setInfo("Parameters are not ready");
         }
-        List<UUID> faceIds = new ArrayList<>();
-        faceIds.add(mFaceId);
-        for (Face face: mFaceListAdapter.faces) {
-            faceIds.add(face.faceId);
-        }
 
         setAllButtonsEnabledStatus(false);
-        new FindPersonalSimilarFaceTask().execute(faceIds.toArray(new UUID[faceIds.size()]));
-        new FindFacialSimilarFaceTask().execute(faceIds.toArray(new UUID[faceIds.size()]));
+        new TrainLargeFaceListTask().execute(mLargeFaceListId);
+        new FindLargeFaceListSimilarFaceTask().execute(mFaceId);
+        new FindLargeFaceListFaceSimilarFaceTask().execute(mFaceId);
     }
 
     public void viewLog(View view) {
@@ -527,7 +686,7 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
     // The adapter of the GridView which contains the thumbnails of the detected faces.
     private class FaceListAdapter extends BaseAdapter {
         // The detected faces.
-        List<Face> faces;
+        List<UUID> faces;
 
         // The thumbnails of detected faces.
         List<Bitmap> faceThumbnails;
@@ -540,11 +699,11 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
             faceIdThumbnailMap = new HashMap<>();
         }
 
-        public void addFaces(Face[] detectionResult, Bitmap bitmap) {
+        public void addFaces(Face[] detectionResult, AddPersistedFaceResult persistedFaceResult, Bitmap bitmap) {
             if (detectionResult != null) {
                 List<Face> detectedFaces = Arrays.asList(detectionResult);
                 for (Face face: detectedFaces) {
-                    faces.add(face);
+                    faces.add(face.faceId);
                     try {
                         Bitmap faceThumbnail =ImageHelper.generateFaceThumbnail(
                                 bitmap, face.faceRectangle);
@@ -555,6 +714,13 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
                         setInfo(e.getMessage());
                     }
                 }
+            }
+            else if(persistedFaceResult != null) {
+                faces.add(persistedFaceResult.persistedFaceId);
+                Bitmap faceThumbnail = bitmap;
+                faceThumbnails.add(faceThumbnail);
+                faceIdThumbnailMap.put(persistedFaceResult.persistedFaceId, faceThumbnail);
+
             }
         }
 
@@ -583,7 +749,7 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
             convertView.setId(position);
 
             Bitmap thumbnailToShow = faceThumbnails.get(position);
-            if (faces.get(position).faceId.equals(mFaceId)) {
+            if (faces.get(position).equals(mFaceId)) {
                 thumbnailToShow = ImageHelper.highlightSelectedFaceThumbnail(thumbnailToShow);
             }
 
@@ -595,12 +761,12 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
     }
 
     // The adapter of the GridView which contains the details of the detected faces.
-    private class SimilarFaceListAdapter extends BaseAdapter {
+    private class SimilarLargeFaceListAdapter extends BaseAdapter {
         // The detected faces.
-        List<SimilarFace> similarFaces;
+        List<SimilarPersistedFace> similarFaces;
 
         // Initialize with detection result.
-        SimilarFaceListAdapter(SimilarFace[] findSimilarFaceResult) {
+        SimilarLargeFaceListAdapter(SimilarPersistedFace[] findSimilarFaceResult) {
             if (findSimilarFaceResult != null) {
                 similarFaces = Arrays.asList(findSimilarFaceResult);
             } else {
@@ -639,7 +805,7 @@ public class FindSimilarFaceActivity extends AppCompatActivity {
 
             // Show the face thumbnail.
             ((ImageView)convertView.findViewById(R.id.image_face)).setImageBitmap(
-                    mFaceListAdapter.faceIdThumbnailMap.get(similarFaces.get(position).faceId));
+                    mFaceListAdapter.faceIdThumbnailMap.get(similarFaces.get(position).persistedFaceId));
 
             return convertView;
         }

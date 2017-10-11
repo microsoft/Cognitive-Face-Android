@@ -92,7 +92,7 @@ public class PersonGroupActivity extends AppCompatActivity {
                 publishProgress("Syncing with server to add person group...");
 
                 // Start creating person group in server.
-                faceServiceClient.createPersonGroup(
+                faceServiceClient.createLargePersonGroup(
                         params[0],
                         getString(R.string.user_provided_person_group_name),
                         getString(R.string.user_provided_person_group_description_data));
@@ -149,7 +149,7 @@ public class PersonGroupActivity extends AppCompatActivity {
             try{
                 publishProgress("Training person group...");
 
-                faceServiceClient.trainPersonGroup(params[0]);
+                faceServiceClient.trainLargePersonGroup(params[0]);
                 return params[0];
             } catch (Exception e) {
                 publishProgress(e.getMessage());
@@ -194,7 +194,7 @@ public class PersonGroupActivity extends AppCompatActivity {
                 addLog("Request: Deleting person " + params[0]);
 
                 UUID personId = UUID.fromString(params[0]);
-                faceServiceClient.deletePerson(mPersonGroupId, personId);
+                faceServiceClient.deletePersonInLargePersonGroup(mPersonGroupId, personId);
                 return params[0];
             } catch (Exception e) {
                 publishProgress(e.getMessage());

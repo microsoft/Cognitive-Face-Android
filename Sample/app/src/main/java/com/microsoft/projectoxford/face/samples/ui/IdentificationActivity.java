@@ -99,9 +99,8 @@ public class IdentificationActivity extends AppCompatActivity {
             try{
                 publishProgress("Getting person group status...");
 
-                TrainingStatus trainingStatus = faceServiceClient.getPersonGroupTrainingStatus(
+                TrainingStatus trainingStatus = faceServiceClient.getLargePersonGroupTrainingStatus(
                         this.mPersonGroupId);     /* personGroupId */
-
                 if (trainingStatus.status != TrainingStatus.Status.Succeeded) {
                     publishProgress("Person group training status is " + trainingStatus.status);
                     mSucceed = false;
@@ -111,7 +110,7 @@ public class IdentificationActivity extends AppCompatActivity {
                 publishProgress("Identifying...");
 
                 // Start identification.
-                return faceServiceClient.identity(
+                return faceServiceClient.identityInLargePersonGroup(
                         this.mPersonGroupId,   /* personGroupId */
                         params,                  /* faceIds */
                         1);  /* maxNumOfCandidatesReturned */

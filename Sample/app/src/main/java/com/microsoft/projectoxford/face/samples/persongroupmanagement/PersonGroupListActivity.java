@@ -78,7 +78,7 @@ public class PersonGroupListActivity extends AppCompatActivity {
                 publishProgress("Deleting selected person groups...");
                 addLog("Request: Delete Group " + params[0]);
 
-                faceServiceClient.deletePersonGroup(params[0]);
+                faceServiceClient.deleteLargePersonGroup(params[0]);
                 return params[0];
             } catch (Exception e) {
                 publishProgress(e.getMessage());

@@ -90,7 +90,7 @@ public class PersonActivity extends AppCompatActivity {
                 addLog("Request: Creating Person in person group" + params[0]);
 
                 // Start the request to creating person.
-                CreatePersonResult createPersonResult = faceServiceClient.createPerson(
+                CreatePersonResult createPersonResult = faceServiceClient.createPersonInLargePersonGroup(
                         params[0],
                         getString(R.string.user_provided_person_name),
                         getString(R.string.user_provided_description_data));
@@ -149,7 +149,7 @@ public class PersonActivity extends AppCompatActivity {
                 addLog("Request: Deleting face " + params[0]);
 
                 UUID faceId = UUID.fromString(params[0]);
-                faceServiceClient.deletePersonFace(personGroupId, mPersonId, faceId);
+                faceServiceClient.deletePersonFaceInLargePersonGroup(personGroupId, mPersonId, faceId);
                 return params[0];
             } catch (Exception e) {
                 publishProgress(e.getMessage());

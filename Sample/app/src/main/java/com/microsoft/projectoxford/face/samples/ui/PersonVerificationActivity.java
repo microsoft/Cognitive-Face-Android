@@ -94,7 +94,7 @@ public class PersonVerificationActivity extends AppCompatActivity {
                 publishProgress("Verifying...");
 
                 // Start verification.
-                return faceServiceClient.verify(
+                return faceServiceClient.verifyInLargePersonGroup(
                         mFaceId,      /* The face ID to verify */
                         mPersonGroupId, /* The person group ID of the person*/
                         mPersonId);     /* The person ID to verify */
