@@ -69,7 +69,7 @@ import java.util.UUID;
 
 public class FaceServiceRestClient implements FaceServiceClient {
     private final WebServiceRequest mRestCall;
-    private Gson mGson = new GsonBuilder().setDateFormat("M/d/yyyy h:m:s a").create();
+    private Gson mGson = new GsonBuilder().setDateFormat("MM/dd/yyyy HH:mm:ss").create();
 
     private static final String DEFAULT_API_ROOT = "https://westus.api.cognitive.microsoft.com/face/v1.0";
     private final String mServiceHost;

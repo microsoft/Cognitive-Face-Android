@@ -37,4 +37,6 @@ public class LargeFaceList {
     public String name;
 
     public String userData;
+
+    public TrainingStatus trainingStatus;
 }
