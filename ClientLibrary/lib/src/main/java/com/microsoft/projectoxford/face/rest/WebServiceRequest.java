@@ -119,8 +119,8 @@ public class WebServiceRequest {
     private Object patch(String url, Map<String, Object> data, String contentType) throws ClientException, IOException {
         HttpPatch request = new HttpPatch(url);
         request.setHeader(HEADER_KEY, mSubscriptionKey);
-        String json = mGson.toJson(data).toString();
-        StringEntity entity = new StringEntity(json);
+        String json = mGson.toJson(data);
+        StringEntity entity = new StringEntity(json, "utf-8");
         request.setEntity(entity);
         request.setHeader(CONTENT_TYPE, APPLICATION_JSON);
         HttpResponse response = mClient.execute(request);
@@ -158,8 +158,8 @@ public class WebServiceRequest {
         request.setHeader(HEADER_KEY, this.mSubscriptionKey);
 
         if (!isStream) {
-            String json = mGson.toJson(data).toString();
-            StringEntity entity = new StringEntity(json);
+            String json = mGson.toJson(data);
+            StringEntity entity = new StringEntity(json, "utf-8");
             request.setEntity(entity);
         } else {
             request.setEntity(new ByteArrayEntity((byte[]) data.get(DATA)));
@@ -186,8 +186,8 @@ public class WebServiceRequest {
         HttpPut request = new HttpPut(url);
 
         request.setHeader(HEADER_KEY, mSubscriptionKey);
-        String json = mGson.toJson(data).toString();
-        StringEntity entity = new StringEntity(json);
+        String json = mGson.toJson(data);
+        StringEntity entity = new StringEntity(json, "utf-8");
         request.setEntity(entity);
         request.setHeader(CONTENT_TYPE, APPLICATION_JSON);
         HttpResponse response = mClient.execute(request);
@@ -217,8 +217,8 @@ public class WebServiceRequest {
             response = mClient.execute(request);
         } else {
             HttpDeleteWithBody request = new HttpDeleteWithBody(url);
-            String json = mGson.toJson(data).toString();
-            StringEntity entity = new StringEntity(json);
+            String json = mGson.toJson(data);
+            StringEntity entity = new StringEntity(json, "utf-8");
             request.setEntity(entity);
             request.setHeader(CONTENT_TYPE, APPLICATION_JSON);
             request.setHeader(HEADER_KEY, mSubscriptionKey);
