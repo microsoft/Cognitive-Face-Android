@@ -121,7 +121,7 @@ public class WebServiceRequest {
         HttpPatch request = new HttpPatch(url);
         request.setHeader(HEADER_KEY, mSubscriptionKey);
         String json = mGson.toJson(data);
-        StringEntity entity = new StringEntity(json, StandardCharsets.UTF_8.toString());
+        StringEntity entity = new StringEntity(json, "utf-8");
         request.setEntity(entity);
         request.setHeader(CONTENT_TYPE, APPLICATION_JSON);
         HttpResponse response = mClient.execute(request);
@@ -160,7 +160,7 @@ public class WebServiceRequest {
 
         if (!isStream) {
             String json = mGson.toJson(data);
-            StringEntity entity = new StringEntity(json, StandardCharsets.UTF_8.toString());
+            StringEntity entity = new StringEntity(json, "utf-8");
             request.setEntity(entity);
         } else {
             request.setEntity(new ByteArrayEntity((byte[]) data.get(DATA)));
@@ -188,7 +188,7 @@ public class WebServiceRequest {
 
         request.setHeader(HEADER_KEY, mSubscriptionKey);
         String json = mGson.toJson(data);
-        StringEntity entity = new StringEntity(json, StandardCharsets.UTF_8.toString());
+        StringEntity entity = new StringEntity(json, "utf-8");
         request.setEntity(entity);
         request.setHeader(CONTENT_TYPE, APPLICATION_JSON);
         HttpResponse response = mClient.execute(request);
@@ -219,7 +219,7 @@ public class WebServiceRequest {
         } else {
             HttpDeleteWithBody request = new HttpDeleteWithBody(url);
             String json = mGson.toJson(data);
-            StringEntity entity = new StringEntity(json, StandardCharsets.UTF_8.toString());
+            StringEntity entity = new StringEntity(json, "utf-8");
             request.setEntity(entity);
             request.setHeader(CONTENT_TYPE, APPLICATION_JSON);
             request.setHeader(HEADER_KEY, mSubscriptionKey);
