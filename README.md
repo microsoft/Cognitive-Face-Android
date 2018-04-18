@@ -21,7 +21,7 @@ dependencies {
     // Use the following line to include client library from Maven Central Repository
     // Change the version number with the latest version according to the search.maven.org result
     //
-    implementation 'com.microsoft.projectoxford:face:1.4.2'
+    implementation 'com.microsoft.projectoxford:face:1.4.3'
 
     // Your other Dependencies...
 }
