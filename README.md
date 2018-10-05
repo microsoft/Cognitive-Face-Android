@@ -65,9 +65,7 @@ Microsoft will receive the images you upload and may use them to improve Face
 API and related services. By submitting an image, you confirm you have consent
 from everyone in it.
 
-<img src="SampleScreenshots/SampleRunning1.png" width="30%"/>
-<img src="SampleScreenshots/SampleRunning2.png" width="30%"/>
-<img src="SampleScreenshots/SampleRunning3.png" width="30%"/>
+<img src="SampleScreenshots/SampleRunning1.png" width="30%"/>	<img src="SampleScreenshots/SampleRunning2.png" width="30%"/>	<img src="SampleScreenshots/SampleRunning3.png" width="30%"/>
 
 ## Updates
 * [Face API Release Notes](https://docs.microsoft.com/en-us/azure/cognitive-services/face/releasenotes)
