@@ -42,7 +42,7 @@ This sample is an Android application to demonstrate the use of Microsoft Face A
 
 ### Requirements
 
-Android OS must be Android 4.1 or higher (API Level 16 or higher).
+Android OS must be Android 5.1 or higher (API Level 22 or higher).
 
 ### Build the Sample
  1. First, you must obtain a Face API subscription key by [following the instructions on our website](https://azure.microsoft.com/en-us/try/cognitive-services/?api=face-api).
