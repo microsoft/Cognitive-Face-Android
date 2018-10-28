@@ -190,7 +190,7 @@ public class PersonVerificationActivity extends AppCompatActivity {
     protected FaceListAdapter mFaceListAdapter;
 
     // Progress dialog popped up when communicating with server.
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
     String mPersonGroupId;
     UUID mPersonId;
