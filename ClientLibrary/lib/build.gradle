@@ -18,8 +18,9 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.13.1'
 }
 
-/*
+
 apply plugin: 'maven'
+/*
 apply plugin: 'signing'
 
 signing {
