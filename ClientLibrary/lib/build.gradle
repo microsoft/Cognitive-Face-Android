@@ -33,6 +33,7 @@ archivesBaseName = "face"
 version = "1.4.3"
 
 // Upload artifacts to maven central repository staging servers
+/*
 uploadArchives {
     repositories {
         mavenDeployer {
@@ -84,3 +85,4 @@ uploadArchives {
         }
     }
 }
+*/
