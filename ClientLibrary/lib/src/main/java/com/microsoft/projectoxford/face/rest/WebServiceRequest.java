@@ -87,7 +87,6 @@ public class WebServiceRequest {
     }
 
     private Object get(String url) throws ClientException, IOException {
-
         Request request = new Request.Builder()
                 .url(url)
                 .get()
@@ -112,16 +111,16 @@ public class WebServiceRequest {
 
 
     private Object patch(String url, Map<String, Object> data, String contentType) throws ClientException, IOException {
-
         String json = mGson.toJson(data);
 
-        Request.Builder builder = new Request.Builder()
+        Request request = new Request.Builder()
                 .url(url)
                 .header(HEADER_KEY, mSubscriptionKey)
                 .patch(RequestBody.create(MediaType.get(APPLICATION_JSON), json))
-                .header(CONTENT_TYPE, APPLICATION_JSON);
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .build();
 
-        Response response = this.mClient.newCall(builder.build()).execute();
+        Response response = this.mClient.newCall(request).execute();
 
         if (response.isSuccessful()) {
             return readInput(response);
@@ -142,7 +141,7 @@ public class WebServiceRequest {
     private Object post(String url, Map<String, Object> data, String contentType) throws ClientException, IOException {
         Request.Builder builder = new Request.Builder()
                 .url(url)
-                .addHeader(HEADER_KEY, this.mSubscriptionKey);
+                .header(HEADER_KEY, this.mSubscriptionKey);
 
         boolean isStream = false;
 
@@ -153,7 +152,7 @@ public class WebServiceRequest {
                 isStream = true;
             }
         } else {
-            builder.addHeader(CONTENT_TYPE, APPLICATION_JSON);
+            builder.header(CONTENT_TYPE, APPLICATION_JSON);
         }
 
         if (!isStream) {
@@ -164,7 +163,6 @@ public class WebServiceRequest {
         }
 
         Response response = mClient.newCall(builder.build()).execute();
-
 
         if (response.isSuccessful()) {
             return readInput(response);
@@ -182,7 +180,6 @@ public class WebServiceRequest {
     }
 
     private Object put(String url, Map<String, Object> data) throws ClientException, IOException {
-
         String json = mGson.toJson(data);
 
         Request.Builder builder = new Request.Builder()
@@ -193,7 +190,7 @@ public class WebServiceRequest {
 
         Response response = mClient.newCall(builder.build()).execute();
 
-         if (response.isSuccessful()) {
+        if (response.isSuccessful()) {
             return readInput(response);
         } else {
             json = readInput(response);
@@ -265,8 +262,9 @@ public class WebServiceRequest {
     }
 
     private String readInput(Response response) throws IOException {
-        if (response.body() == null)
+        if (response.body() == null) {
             return null;
+        }
 
         return response.body().string();
     }
