@@ -18,9 +18,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.13.1'
 }
 
-
 apply plugin: 'maven'
-/*
 apply plugin: 'signing'
 
 signing {
@@ -35,7 +33,6 @@ archivesBaseName = "face"
 version = "1.4.3"
 
 // Upload artifacts to maven central repository staging servers
-
 uploadArchives {
     repositories {
         mavenDeployer {
@@ -87,4 +84,3 @@ uploadArchives {
         }
     }
 }
-*/
