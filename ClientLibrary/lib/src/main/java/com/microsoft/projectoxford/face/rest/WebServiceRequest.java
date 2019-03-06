@@ -238,7 +238,7 @@ public class WebServiceRequest {
 
 
     public static String getUrl(String path, Map<String, Object> params) {
-        StringBuffer url = new StringBuffer(path);
+        StringBuilder url = new StringBuilder(path);
 
         boolean start = true;
         for (Map.Entry<String, Object> param : params.entrySet()) {
