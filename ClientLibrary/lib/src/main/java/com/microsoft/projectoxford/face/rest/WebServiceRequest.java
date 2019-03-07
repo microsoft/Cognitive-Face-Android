@@ -182,13 +182,14 @@ public class WebServiceRequest {
     private Object put(String url, Map<String, Object> data) throws ClientException, IOException {
         String json = mGson.toJson(data);
 
-        Request.Builder builder = new Request.Builder()
+        Request request = new Request.Builder()
                 .url(url)
                 .header(HEADER_KEY, mSubscriptionKey)
                 .header(CONTENT_TYPE, APPLICATION_JSON)
-                .put(RequestBody.create(MediaType.get(APPLICATION_JSON), json));
+                .put(RequestBody.create(MediaType.get(APPLICATION_JSON), json))
+                .build();
 
-        Response response = mClient.newCall(builder.build()).execute();
+        Response response = mClient.newCall(request).execute();
 
         if (response.isSuccessful()) {
             return readInput(response);
