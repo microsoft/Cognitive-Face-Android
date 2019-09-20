@@ -227,6 +227,19 @@ public interface FaceServiceClient {
     Face[] detect(InputStream imageStream, boolean returnFaceId, boolean returnFaceLandmarks, FaceAttributeType[] returnFaceAttributes) throws ClientException, IOException;
 
     /**
+     * Detects faces in an uploaded image.
+     * @param imageStream The image stream.
+     * @param returnFaceId If set to <c>true</c> [return face ID].
+     * @param returnFaceLandmarks If set to <c>true</c> [return face landmarks]
+     * @param returnFaceAttributes Return face attributes.
+     * @param recognitionModel specific of recognition model to detect the face
+     * @return detected faces.
+     * @throws ClientException
+     * @throws IOException
+     */
+    Face[] detect(InputStream imageStream, boolean returnFaceId, boolean returnFaceLandmarks, FaceAttributeType[] returnFaceAttributes, String recognitionModel) throws ClientException, IOException;
+
+    /**
      * Verifies whether the specified two faces belong to the same person.
      * @param faceId1 The face id 1.
      * @param faceId2 The face id 2.

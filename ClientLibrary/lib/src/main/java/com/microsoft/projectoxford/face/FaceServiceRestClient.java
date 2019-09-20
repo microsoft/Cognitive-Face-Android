@@ -185,6 +185,50 @@ public class FaceServiceRestClient implements FaceServiceClient {
     }
 
     @Override
+    public Face[] detect(InputStream imageStream, boolean returnFaceId, boolean returnFaceLandmarks, FaceAttributeType[] returnFaceAttributes, String recognitionModel) throws ClientException, IOException {
+        Map<String, Object> params = new HashMap<>();
+
+        params.put("returnFaceId", returnFaceId);
+        params.put("returnFaceLandmarks", returnFaceLandmarks);
+        if (returnFaceAttributes != null && returnFaceAttributes.length > 0) {
+            StringBuilder faceAttributesStringBuilder = new StringBuilder();
+            boolean firstAttribute = true;
+            for (FaceAttributeType faceAttributeType: returnFaceAttributes)
+            {
+                if (firstAttribute) {
+                    firstAttribute = false;
+                } else {
+                    faceAttributesStringBuilder.append(",");
+                }
+
+                faceAttributesStringBuilder.append(faceAttributeType);
+            }
+            params.put("returnFaceAttributes", faceAttributesStringBuilder.toString());
+        }
+        params.put("recognitionModel", (recognitionModel == null || !recognitionModel.matches("recognition_0[12]")) ? "recognition_01" : recognitionModel);
+
+        String path = String.format("%s/%s", mServiceHost, DETECT_QUERY);
+        String uri = WebServiceRequest.getUrl(path, params);
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        int bytesRead;
+        byte[] bytes = new byte[1024];
+        while ((bytesRead = imageStream.read(bytes)) > 0) {
+            byteArrayOutputStream.write(bytes, 0, bytesRead);
+        }
+        byte[] data = byteArrayOutputStream.toByteArray();
+        params.clear();
+        params.put(DATA, data);
+
+        String json = (String)mRestCall.request(uri, RequestMethod.POST, params, STREAM_DATA);
+        Type listType = new TypeToken<List<Face>>() {
+        }.getType();
+        List<Face> faces = mGson.fromJson(json, listType);
+
+        return faces.toArray(new Face[faces.size()]);
+    }
+
+    @Override
     public VerifyResult verify(UUID faceId1, UUID faceId2) throws ClientException, IOException {
         Map<String, Object> params = new HashMap<>();
 
