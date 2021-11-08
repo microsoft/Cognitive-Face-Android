@@ -1,4 +1,5 @@
-# Microsoft Face API: Android Client Library & Sample
+# This repository has been retired. Please visit the [Face QuickStart](https://docs.microsoft.com/en-us/azure/cognitive-services/face/quickstarts/client-libraries?tabs=visual-studio&pivots=programming-language-csharp) to get started with the latest Face SDKs.
+### Microsoft Face API: Android Client Library & Sample
 This repo contains the Android client library & sample for the Microsoft Face API, an offering within [Microsoft Cognitive Services](https://azure.microsoft.com/en-us/services/cognitive-services/), formerly known as Project Oxford.
 
 * [Learn about the Face API](https://azure.microsoft.com/en-us/services/cognitive-services/face/)
